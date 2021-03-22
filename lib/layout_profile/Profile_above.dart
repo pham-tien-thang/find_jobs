@@ -104,7 +104,14 @@ String birthday(String fromdata){
               width: mda/1.4,
               height: 50,
               decoration: BoxDecoration(
-            color: Colors.blue,
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      Colors.blue,
+                      Colors.green,
+                    ],
+                  ),
                 borderRadius: BorderRadius.only(topRight: Radius.circular(50),bottomRight:Radius.circular(50))
 
               ),

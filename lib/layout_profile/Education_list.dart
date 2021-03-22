@@ -22,7 +22,7 @@ class _Education extends State<Education> {
     var dateConvertfrom = new DateTime.fromMillisecondsSinceEpoch(
         int.parse(from) );
     var dateConvertto = new DateTime.fromMillisecondsSinceEpoch(
-        int.parse("1485882000000") );
+        int.parse(to) );
     String t = "từ "+formatter.format(dateConvertfrom)+" đến "+formatter.format(dateConvertto);
     return t;
   }
