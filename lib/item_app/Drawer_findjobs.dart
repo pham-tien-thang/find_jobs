@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:configurable_expansion_tile/configurable_expansion_tile.dart';
 import 'package:find_jobs/helper/Preferences.dart';
+import 'package:find_jobs/screen/Detail_user.dart';
 import 'package:find_jobs/screen/HomeScreen.dart';
 import 'package:find_jobs/screen/LoginScreen.dart';
 import 'package:find_jobs/screen/NewScreen.dart';
@@ -73,7 +74,9 @@ class _drawer extends State<Drawer_findjobs> {
                   //color: Colors.blue,
                   textColor: Colors.white,
                   onPressed: () {
-
+                    Navigator.pop(context);
+               Navigator.push(
+                        context, new MaterialPageRoute(builder: (context) => profile(my_acc: true,)));
                   },
                 ),
                 Transform.rotate(
