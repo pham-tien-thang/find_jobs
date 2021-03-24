@@ -20,8 +20,6 @@ import 'package:flutter/widgets.dart';
 import 'Detail_user.dart';
 import 'SignUp.dart';
 
-
-
 // ignore: camel_case_types
 class HomeScreen extends StatelessWidget {
   @override
@@ -38,6 +36,7 @@ class HomeScreen extends StatelessWidget {
 
 class MyHomeScreen extends StatefulWidget {
   MyHomeScreen({Key key}) : super(key: key);
+
   @override
   _MyHomeScreen createState() => _MyHomeScreen();
 }
@@ -52,22 +51,23 @@ class _MyHomeScreen extends State<MyHomeScreen> {
   int gr = 1;
   TextEditingController mail = new TextEditingController();
   TextEditingController pw = new TextEditingController();
+
   void _toggle() {
     setState(() {
       _obscuretext = !_obscuretext;
       print(_obscuretext);
     });
   }
+
   //----thoat
-  show_dialog(){
+  show_dialog() {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return Dialog(
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
-              borderRadius:BorderRadius.circular(20.0),
-
+              borderRadius: BorderRadius.circular(20.0),
             ), //this right here
             child: Container(
               height: 200,
@@ -78,10 +78,12 @@ class _MyHomeScreen extends State<MyHomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
-                      child: Text("Thoát ứng dụng ?",
-                        style:TextStyle(
+                      child: Text(
+                        "Thoát ứng dụng ?",
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
-                        ),),
+                        ),
+                      ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -95,7 +97,7 @@ class _MyHomeScreen extends State<MyHomeScreen> {
                             "Đồng ý",
                             style: TextStyle(color: Colors.white),
                           ),
-                          color:Colors.green,
+                          color: Colors.green,
                         ),
                         RaisedButton(
                           onPressed: () {
@@ -118,15 +120,16 @@ class _MyHomeScreen extends State<MyHomeScreen> {
   }
 
   //----------bottom
-  ontapbottom (int index){
+  ontapbottom(int index) {
     setState(() {
-      if (index == 0) {
-      }
+      if (index == 0) {}
       if (index == 2) {
-
         Navigator.push(
-            context, new MaterialPageRoute(builder: (context) => profile(my_acc: true,)))
-        ;
+            context,
+            new MaterialPageRoute(
+                builder: (context) => profile(
+                      my_acc: true,
+                    )));
       }
       if (index == 1) {
         // Navigator.push(
@@ -135,35 +138,35 @@ class _MyHomeScreen extends State<MyHomeScreen> {
     });
   }
 
-@override
+  @override
   void initState() {
-
     // TODO: implement initState
-  scrollControllers.addListener(() {
-    if (scrollControllers.position.userScrollDirection ==
-        ScrollDirection.reverse) {
-      if(_isVisible)
-        setState(() {
-          _isVisible = false;
-          print("**** $_isVisible up");
-        });
-    }
-    if (scrollControllers.position.userScrollDirection ==
-        ScrollDirection.forward) {
-      if(!_isVisible)
-        setState(() {
-          _isVisible = true;
-          print("**** $_isVisible down");
-        });
-    }
-  });
-  // TODO: implement initState
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-  ));
+    scrollControllers.addListener(() {
+      if (scrollControllers.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (_isVisible)
+          setState(() {
+            _isVisible = false;
+            print("**** $_isVisible up");
+          });
+      }
+      if (scrollControllers.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (!_isVisible)
+          setState(() {
+            _isVisible = true;
+            print("**** $_isVisible down");
+          });
+      }
+    });
+    // TODO: implement initState
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+    ));
 
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     double mda = MediaQuery.of(context).size.width;

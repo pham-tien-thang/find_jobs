@@ -16,6 +16,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
+        '/home': (context) => HomeScreen(),
+        // When navigating to the "/second" route, build the SecondScreen widget.
+        // '/second': (context) => SecondScreen(),
+      },
       title: 'Việc làm It',
       theme: ThemeData(
         // This is the theme of your application.
@@ -33,7 +41,6 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
