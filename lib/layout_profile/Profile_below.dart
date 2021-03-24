@@ -1,6 +1,9 @@
 import 'dart:ui';
 
 import 'package:find_jobs/helper/Api_findjobs.dart';
+import 'package:find_jobs/helper/Toast.dart';
+import 'package:find_jobs/layout_profile/Add_edu.dart';
+import 'package:find_jobs/layout_profile/Add_exp.dart';
 import 'package:find_jobs/layout_profile/Experence_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -8,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'Education_list.dart';
 import 'Tittle_divider.dart';
 
@@ -25,7 +28,57 @@ var data;
 }
 
 class _Profile_below extends State<Profile_below> {
+  show_dialog(){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SingleChildScrollView(
+            child: Dialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius:BorderRadius.circular(20.0),
 
+              ), //this right here
+              child: SingleChildScrollView(
+                child: Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [
+                          Colors.green,
+                          Colors.blue,
+                        ],
+                      ),
+                    borderRadius:BorderRadius.circular(10),
+                  ),
+
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Text("THÊM CÔNG TY",
+                              style:TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),),
+                          ),
+                          Add_exp()
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
   //String mail = sharedPrefs.mail;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   call_api_tinh(String id_tinh)async{
@@ -83,6 +136,20 @@ class _Profile_below extends State<Profile_below> {
       }
     }
   }
+  Future<void> _makePhoneCall(String contact) async {
+    String telScheme = 'tel:$contact';
+    if (await canLaunch(telScheme)) {
+      await launch(telScheme);
+    } else {
+      throw 'Không thể gọi  $telScheme';
+    }
+
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     double mda = MediaQuery.of(context).size.width;
@@ -95,7 +162,14 @@ class _Profile_below extends State<Profile_below> {
             width: mda/1.4,
             height: 50,
             decoration: BoxDecoration(
-                color: Colors.blue,
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    Colors.blue,
+                    Colors.green,
+                  ],
+                ),
                 borderRadius: BorderRadius.only(topRight: Radius.circular(50),bottomRight:Radius.circular(50))
 
             ),
@@ -119,11 +193,22 @@ class _Profile_below extends State<Profile_below> {
               children: [
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
-                  child: Icon(
-                    Icons.phone_in_talk,
-                    color: Colors.lightBlue,
-                    size: 25.0,
+                  child: GestureDetector(
+                    onTap: (){
+                      widget.data['data']['user']['phone'].toString()=="null"?
+                         showToast("chưa cập nhật", context, Colors.redAccent, Icons.phone)
+                          :_makePhoneCall(widget.data['data']['user']['phone'].toString());
+                    },
+                    child: Image.asset("assets/call.gif",
+                    width: 30,
+                      height: 30,
+                    ),
                   ),
+                  // Icon(
+                  //   Icons.phone_in_talk,
+                  //   color: Colors.lightBlue,
+                  //   size: 25.0,
+                  // ),
                 ),
                 Text(widget.data['data']['user']['phone'].toString()=="null"?"chưa cập nhật":widget.data['data']['user']['phone'].toString(),
                   style: TextStyle(
@@ -219,7 +304,14 @@ class _Profile_below extends State<Profile_below> {
             width: mda/1.4,
             height: 50,
             decoration: BoxDecoration(
-                color: Colors.blue,
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    Colors.blue,
+                    Colors.green,
+                  ],
+                ),
                 borderRadius: BorderRadius.only(topRight: Radius.circular(50),bottomRight:Radius.circular(50))
 
             ),
@@ -237,6 +329,8 @@ class _Profile_below extends State<Profile_below> {
             children: [
               FlatButton(
                 onPressed: (){
+
+            show_dialog();
 
                 },
                 child: Row(
@@ -263,7 +357,14 @@ class _Profile_below extends State<Profile_below> {
             width: mda/1.4,
             height: 50,
             decoration: BoxDecoration(
-                color: Colors.blue,
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    Colors.blue,
+                    Colors.green,
+                  ],
+                ),
                 borderRadius: BorderRadius.only(topRight: Radius.circular(50),bottomRight:Radius.circular(50))
 
             ),
