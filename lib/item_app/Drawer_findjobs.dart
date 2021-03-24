@@ -317,6 +317,8 @@ class _drawer extends State<Drawer_findjobs> {
               Divider(),
               Container(
                 width: 300,
+
+                
                 height: 35,
                 child: FlatButton(
                   child:  Container(
