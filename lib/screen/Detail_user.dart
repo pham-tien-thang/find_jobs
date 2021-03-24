@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:find_jobs/helper/Api_findjobs.dart';
 import 'package:find_jobs/helper/Preferences.dart';
 import 'package:find_jobs/item_app/BottomNavigation.dart';
+import 'package:find_jobs/item_app/Buttton_pair.dart';
 import 'package:find_jobs/layout_profile/Profile_above.dart';
 import 'package:find_jobs/layout_profile/Profile_below.dart';
 import 'package:find_jobs/screen/HomeScreen.dart';
@@ -29,20 +30,38 @@ class _profile extends State<profile> {
   //user_Infomation user_infomationn = new user_Infomation();
   int type;
   int solan =0;
-
+  bool scr = false;
+  ScrollController scrollControllers = new ScrollController();
+  bool _isVisible = true;
+  bool h = false;
+  String contact;
   call_api_detail()async{
     Api_findjobs a = new Api_findjobs(widget.my_acc?"/api/users/details-get-id":"/api/users/details-get-id", {
-      //'userId': sharedPrefs.user_id.toString(),
-      'userId': widget.my_acc?'1':widget.id,
+      //'userId': ,
+      'userId': widget.my_acc?sharedPrefs.user_id.toString():widget.id,
     },);
 var res = await a.postMethod();
+
     return res;
   }
   Future<void> _refresh() async {
    call_api_detail();
   }
-  ScrollController scrollControllers = new ScrollController();
-  bool _isVisible = true;
+
+  _onUpdateScroll(ScrollMetrics metrics) {
+    if (scrollControllers.offset > 40&& !h) {
+      setState(() {
+        h = true;
+      //  print(scrollControllers.offset.toString()+"hien len============="); // scr=true;
+      });
+    } else if (scrollControllers.offset <= 10&& h) {
+      setState(() {
+        h = false;
+        //print(scrollControllers.offset.toString()+"khong hien len============="); // sc
+      });
+    }
+
+  }
   @override
   void initState() {
     scrollControllers.addListener(() {
@@ -113,6 +132,9 @@ var res = await a.postMethod();
 call_api_detail();
     double mda = MediaQuery.of(context).size.width;
     return Scaffold(
+      floatingActionButton: ButtonPair( s: scrollControllers,
+        h: h,
+      ),
       key: _scaffoldKey,
       bottomNavigationBar: Visibility(
           visible: _isVisible,
@@ -364,14 +386,20 @@ call_api_detail();
                 },
                 body: RefreshIndicator(
                   onRefresh: _refresh,
-                  child: SingleChildScrollView(
-
-                    child: Center(
-                      child: Column(
-                        children: [
-                        Profile_above(data: snapshot.data,my_acc: widget.my_acc,),
-                          Profile_below(data: snapshot.data,my_acc:widget.my_acc ,)
-                        ],
+                  child: NotificationListener <ScrollNotification>(
+                    onNotification: (scrollNotification) {
+                      if (scrollNotification is ScrollUpdateNotification) {
+                        _onUpdateScroll(scrollNotification.metrics);
+                      }
+                    },
+                    child: SingleChildScrollView(
+                      child: Center(
+                        child: Column(
+                          children: [
+                          Profile_above(data: snapshot.data,my_acc: widget.my_acc,),
+                            Profile_below(data: snapshot.data,my_acc:widget.my_acc ,)
+                          ],
+                        ),
                       ),
                     ),
                   ),

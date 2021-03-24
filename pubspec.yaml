@@ -27,6 +27,8 @@ dependencies:
   fluttertoast: ^7.1.5
   http: ^0.12.2
   shared_preferences: '>=0.5.7+3'
+  flutter_phone_state: ^0.5.8
+  url_launcher: ^5.7.0
   carousel_slider: ^2.2.1
   configurable_expansion_tile: ^1.0.0
   badges: ^1.2.0
