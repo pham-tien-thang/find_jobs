@@ -42,7 +42,7 @@ class _Add_exp extends State<Add_exp> {
       'jobTitle':jobTitle.text.toString(),
       'dateInMilliseconds':datein.toString(),
       'dateOutMilliseconds':dateout.toString(),
-      'jobDetails ':jobDetails.text.length>0?jobDetails.text.toString():"",
+      'jobDetails':jobDetails.text.length>0?jobDetails.text.toString():"",
     },);
     var res = await a.postMethod();
     print(res);
@@ -61,7 +61,7 @@ class _Add_exp extends State<Add_exp> {
       });
     }
     else  if(
-    jobTitle.text.length<2||name_company.text.length>50
+    jobTitle.text.length<2||jobTitle.text.length>50
     ){
       showToast("Chức vụ từ 2 đến 50 ký tự", context, Colors.red, Icons.cancel);
       setState(() {

@@ -9,32 +9,78 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
-class Edit_exp extends StatefulWidget {
-  Edit_exp({Key key,this.data}) : super(key: key);
- var data;
+class Edit_edu extends StatefulWidget {
+  Edit_edu({Key key,this.data}) : super(key: key);
+  var data;
   @override
-  _Edit_exp createState() => _Edit_exp();
+  _Edit_edu createState() => _Edit_edu();
 }
 
-class _Edit_exp extends State<Edit_exp> {
+class _Edit_edu extends State<Edit_edu> {
   TextEditingController to_date = new TextEditingController();
   TextEditingController from_date = new TextEditingController();
-  TextEditingController name_company = new TextEditingController();
-  TextEditingController jobTitle = new TextEditingController();
-  TextEditingController jobDetails = new TextEditingController();
+  TextEditingController name_school = new TextEditingController();
+  TextEditingController Title = new TextEditingController();
+  TextEditingController Details = new TextEditingController();
   bool er_name = false;
   bool er_title = false;
+  String _current;
+  String id_level;
+  List education = [
+    "Trung học",
+    "Trung cấp",
+    "Cao đẳng",
+    "Đại học",
+    "Thạc sĩ",
+    "Tiến sĩ",
+    "Khác",
+  ];
+  List<DropdownMenuItem<String>> _pstdropDownMenuItems ;
+  List<DropdownMenuItem<String>> getpstDropDownMenuItems() {
+    List<DropdownMenuItem<String>> items = new List();
+    for (String de in education) {
+      items.add(drop(de));
+    }
+    return items;
+  }
+  Widget drop(String d) {
+    return new DropdownMenuItem(
+        value: d,
+        child: Center(
+          child:Text(
+            d,
+            style: TextStyle(fontSize: 14),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ));
+  }
+  String level(String c){
+    for(int i =0; i <education.length;i++){
+      if (c==education.elementAt(i).toString()){
+        int id = i+1;
+        return id.toString();
+      }
+    }
+  }
+  void changedpstDropDownItem(String selectedCity) {
+    setState(() {
+      _current = selectedCity;
+      id_level = level(selectedCity);
+      print(id_level);
+    });
+  }
   final f = new DateFormat('MM-dd-yyyy');
 
   call_api(int datein, int dateout )async{
-    Api_findjobs a = new Api_findjobs("/api/experiences/update", {
+    Api_findjobs a = new Api_findjobs("/api/education/update", {
       'userId':sharedPrefs.user_id.toString(),
-      'experienceId': jobDetails.text = widget.data['id'].toString(),
-      'companyName':name_company.text.toString(),
-      'jobTitle':jobTitle.text.toString(),
-      'dateInMilliseconds':datein.toString(),
-      'dateOutMilliseconds':dateout.toString(),
-      'jobDetails ':jobDetails.text.length>0?jobDetails.text.toString():"",
+      'educationId':  widget.data['educationId'].toString(),
+      'schoolName':name_school.text.toString(),
+      'major':Title.text.toString(),
+      'academicDegreeLevelId':id_level.toString(),
+      'startDateInMilliseconds':datein.toString(),
+      'endDateInMilliseconds':dateout.toString(),
+      'achievements':Details.text.length>0?Details.text.toString():"",
     },);
     var res = await a.postMethod();
     print(res);
@@ -44,25 +90,25 @@ class _Edit_exp extends State<Edit_exp> {
     DateTime from = from_date.text.length>1?f.parse(from_date.text):null;
     DateTime to = to_date.text.length>1?f.parse(to_date.text):null;
     if(
-    name_company.text.length<2||name_company.text.length>50
+    name_school.text.length<2||name_school.text.length>50
     ){
-      showToast("Tên công ty từ 2 đến 50 ký tự", context, Colors.red, Icons.cancel);
+      showToast("Tên trường từ 2 đến 50 ký tự", context, Colors.red, Icons.cancel);
       setState(() {
         er_name = true;
         er_title = false;
       });
     }
     else  if(
-    jobTitle.text.length<2||name_company.text.length>50
+    Title.text.length<2||name_school.text.length>50
     ){
-      showToast("Chức vụ từ 2 đến 50 ký tự", context, Colors.red, Icons.cancel);
+      showToast("Chuyên ngành từ 2 đến 50 ký tự", context, Colors.red, Icons.cancel);
       setState(() {
         er_name = false;
         er_title = true;
       });
     }
     else if(from_date.text.length<1|| to_date.text.length<1){
-      //call_api(null, null);
+      call_api(null, null);
       setState(() {
         er_name = false;
         er_title = false;
@@ -104,20 +150,24 @@ class _Edit_exp extends State<Edit_exp> {
     DateTime now = new DateTime.now();
     final DateFormat formatter = DateFormat('MM-dd-yyyy');
     var dateConvertfrom = new DateTime.fromMillisecondsSinceEpoch(
-        int.parse(widget.data['dateInMilliseconds'].toString()) );
+        int.parse(widget.data['startDateInMilliseconds'].toString()) );
     var dateConvertto = new DateTime.fromMillisecondsSinceEpoch(
-        int.parse(widget.data['dateOutMilliseconds'].toString()) );
+        int.parse(widget.data['endDateInMilliseconds'].toString()) );
     String date_in =formatter.format(dateConvertfrom);
     String date_out = formatter.format(dateConvertto);
-    name_company.text = widget.data['companyName'].toString();
-    jobTitle.text = widget.data['jobTitle'].toString();
-    jobDetails.text = widget.data['jobDetails'].toString()=="null"?"": widget.data['jobTitle'].toString();
-  from_date.text = date_in;
-  to_date.text = date_out;
+    name_school.text = widget.data['schoolName'].toString();
+    Title.text = widget.data['major'].toString();
+    Details.text = widget.data['achievements'].toString()=="null"?"": widget.data['jobTitle'].toString();
+    from_date.text = date_in;
+    to_date.text = date_out;
   }
+
   @override
   void initState() {
-settext();
+    settext();
+    _current = education.elementAt(0);
+    _pstdropDownMenuItems = getpstDropDownMenuItems();
+    id_level = level(_current);
     super.initState();
   }
   @override
@@ -136,12 +186,12 @@ settext();
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Tên công ty:"),
+            Text("Tên trường:"),
             Container(height: 10,),
             TextField(
               autofocus: false,
               maxLength: 50,
-              controller: name_company,
+              controller: name_school,
               decoration: InputDecoration(
                 errorText: er_name?"Nhập lại tên":null,
                 border: new OutlineInputBorder(
@@ -154,16 +204,16 @@ settext();
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
                     borderSide: BorderSide(color: Colors.grey, width: 1.0)),
-                hintText: 'Ví dụ : Công ty abc',
+                hintText: 'Ví dụ : Trường abc',
               ),
             ),
             //========================
-            Text("Chức vụ:"),
+            Text("Chyên nghành:"),
             Container(height: 10,),
             TextField(
               autofocus: false,
               maxLength: 50,
-              controller: jobTitle,
+              controller: Title,
               decoration: InputDecoration(
                 errorText: er_title?"Nhập lại chức vụ":null,
                 border: new OutlineInputBorder(
@@ -176,11 +226,24 @@ settext();
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
                     borderSide: BorderSide(color: Colors.grey, width: 1.0)),
-                hintText: 'Ví dụ : nhân viên',
+                hintText: 'Ví dụ : CNTT',
+              ),
+            ),
+            //================
+            Text("Hệ đào tạo:"),
+            Container(height: 10,),
+            Center(
+              child: DropdownButton(
+                value: _current,
+                items: _pstdropDownMenuItems,
+                onChanged: changedpstDropDownItem,
               ),
             ),
             //============
-            Center(child: Text("Thời gian")),
+            Center(child: Padding(
+              padding: const EdgeInsets.fromLTRB(0,10,0,0),
+              child: Text("Thời gian:"),
+            )),
             Row(
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -256,14 +319,14 @@ settext();
             ),
 
             //==============
-            Text("Mô tả:"),
+            Text("Thành tựu:"),
             Container(height: 10,),
             TextField(
               autofocus: false,
               maxLength: 1000,
               keyboardType: TextInputType.multiline,
               maxLines: null,
-              controller: jobDetails,
+              controller: Details,
               decoration: InputDecoration(
                 contentPadding:
                 EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -294,10 +357,9 @@ settext();
                 RaisedButton(
                   onPressed: () {
                     validate();
-
                   },
                   child: Text(
-                    "Thay đổi",
+                    "Cập nhật",
                     style: TextStyle(color: Colors.white),
                   ),
                   color: Colors.green,

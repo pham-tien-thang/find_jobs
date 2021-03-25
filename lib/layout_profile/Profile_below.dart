@@ -79,6 +79,57 @@ class _Profile_below extends State<Profile_below> {
           );
         });
   }
+  show_dialog_edu(){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SingleChildScrollView(
+            child: Dialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius:BorderRadius.circular(20.0),
+
+              ), //this right here
+              child: SingleChildScrollView(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        Colors.green,
+                        Colors.blue,
+                      ],
+                    ),
+                    borderRadius:BorderRadius.circular(10),
+                  ),
+
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Text("THÊM TRƯỜNG HỌC",
+                              style:TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),),
+                          ),
+                          Add_edu(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
   //String mail = sharedPrefs.mail;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   call_api_tinh(String id_tinh)async{
@@ -385,7 +436,7 @@ class _Profile_below extends State<Profile_below> {
                 children: [
                   FlatButton(
                     onPressed: (){
-
+                      show_dialog_edu();
                     },
                     child: Row(
                       children: [
@@ -404,10 +455,16 @@ class _Profile_below extends State<Profile_below> {
 
             ],
           ),
-          widget.data['data']['experiences'].length<1?Padding(
+          widget.data['data']['education'].length<1?Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text("Chưa cập nhật"),
-          ):Education(my_acc: widget.my_acc,data: widget.data,count: widget.data['data']['education'].length,)
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0,0,0,50),
+              child: Text("Chưa cập nhật"),
+            ),
+          ):Padding(
+            padding:  const EdgeInsets.fromLTRB(0,0,0,50),
+            child: Education(my_acc: widget.my_acc,data: widget.data,count: widget.data['data']['education'].length,),
+          )
           //Text("chưa có gì"),
 
         ],
