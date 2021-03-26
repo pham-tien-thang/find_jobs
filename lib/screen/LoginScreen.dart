@@ -57,7 +57,6 @@ class _MyLoginScreen extends State<MyLoginScreen> {
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius:BorderRadius.circular(20.0),
-
             ), //this right here
             child: Container(
               height: 200,

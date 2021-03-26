@@ -7,6 +7,7 @@ import 'package:find_jobs/item_app/BottomNavigation.dart';
 import 'package:find_jobs/item_app/Drawer_findjobs.dart';
 import 'package:find_jobs/layout_home/Header_home.dart';
 import 'package:find_jobs/layout_home/Newest_candicate.dart';
+import 'package:find_jobs/layout_home/Newest_jobs.dart';
 import 'package:find_jobs/layout_home/Slider.dart';
 import 'package:find_jobs/main.dart';
 import 'package:find_jobs/screen/LoginScreen.dart';
@@ -223,7 +224,7 @@ class _MyHomeScreen extends State<MyHomeScreen> {
                                      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                                      child: Column(
                                        children: [
-                                        Text("A")
+                                        Newest_jobs(),
                                        ],
                                      ),
                                    ),

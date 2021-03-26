@@ -7,6 +7,8 @@ import 'package:find_jobs/item_app/BottomNavigation.dart';
 import 'package:find_jobs/item_app/Buttton_pair.dart';
 import 'package:find_jobs/layout_profile/Profile_above.dart';
 import 'package:find_jobs/layout_profile/Profile_below.dart';
+import 'package:find_jobs/model/Option.dart';
+import 'package:find_jobs/screen/Change_password.dart';
 import 'package:find_jobs/screen/HomeScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -125,7 +127,24 @@ var res = await a.postMethod();
       }
     });
   }
+  void Action(String choice){
 
+    if(choice == Option.doi_mat_khau){
+      Navigator.push(
+          context, new MaterialPageRoute(builder: (context) => Change_password() ));
+
+    }
+    // else if(choice == Option.listus){
+    //   Navigator.push(
+    //       context, new MaterialPageRoute(builder: (context) => job_apply() ));
+    //
+    // }
+    // else if(choice == Option.find_jobs){
+    //   Navigator.push(
+    //       context, new MaterialPageRoute(builder: (context) => Job_Find_People_Page() ));
+    //
+    // }
+  }
   @override
   Widget build(BuildContext context) {
     sharedPrefs.init();
@@ -194,41 +213,27 @@ call_api_detail();
                     (BuildContext context, bool innerBoxIsScrolled) {
                   return <Widget>[
                     SliverAppBar(
-                      // actions: <Widget>[
-                      //   PopupMenuButton<String>(
-                      //     onSelected: Action,
-                      //     itemBuilder: (BuildContext context){
-                      //       return sharedPrefs.check?Option.choices.map((String choice){
-                      //         return PopupMenuItem<String>(
-                      //           value: choice,
-                      //           child: Row(
-                      //             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //             children: [
-                      //               Container(
-                      //                   margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      //                   child: Text(choice)
-                      //               ),
-                      //             ],
-                      //           ),
-                      //         );
-                      //       }).toList():
-                      //       Option.choices2.map((String choice){
-                      //         return PopupMenuItem<String>(
-                      //           value: choice,
-                      //           child: Row(
-                      //             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //             children: [
-                      //               Container(
-                      //                   margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      //                   child: Text(choice)
-                      //               ),
-                      //             ],
-                      //           ),
-                      //         );
-                      //       }).toList();
-                      //     },
-                      //   )
-                      // ],
+                      actions: widget.my_acc?<Widget>[
+                        PopupMenuButton<String>(
+                          onSelected: Action,
+                          itemBuilder: (BuildContext context){
+                            return Option.choices.map((String choice){
+                              return PopupMenuItem<String>(
+                                value: choice,
+                                child: Row(
+                                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                        child: Text(choice)
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList();
+                          },
+                        )
+                      ]:null,
                       expandedHeight: 176.0,
                       floating: true,
                       pinned: true,
