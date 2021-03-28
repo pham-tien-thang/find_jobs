@@ -7,6 +7,7 @@ class Api_findjobs {
   Api_findjobs(api , param){
     this.api = api;
     this.param = param;
+    
   }
   postMethod() async {
     String url2 = "https://find-job-app.herokuapp.com"+this.api;
