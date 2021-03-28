@@ -11,6 +11,7 @@ import 'package:find_jobs/layout_home/Newest_jobs.dart';
 import 'package:find_jobs/layout_home/Slider.dart';
 import 'package:find_jobs/main.dart';
 import 'package:find_jobs/screen/LoginScreen.dart';
+import 'package:find_jobs/screen/Search_keywword.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -133,8 +134,8 @@ class _MyHomeScreen extends State<MyHomeScreen> {
                     )));
       }
       if (index == 1) {
-        // Navigator.push(
-        //     context, new MaterialPageRoute(builder: (context) => Job_Find_People_Page()));
+        Navigator.push(
+            context, new MaterialPageRoute(builder: (context) => Search_keywword()));
       }
     });
   }

@@ -2,10 +2,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 removeValues () async {
   SharedPreferences prefs =  await  SharedPreferences . getInstance ();
   // Xóa chuỗi
-  prefs.remove("auth");
-  prefs.remove("mail");
-  prefs.remove("pw");
-  prefs.remove("user_id");
+  prefs.remove("phone");
+  prefs.remove("email");
+  prefs.remove("password");
+  prefs.remove("id");
   prefs.remove("name");
 }
 remove_r()async{

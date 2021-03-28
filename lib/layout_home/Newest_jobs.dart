@@ -13,7 +13,7 @@ class Newest_jobs extends StatefulWidget {
 // ignore: camel_case_types
 class _Newest_jobs extends State<Newest_jobs> {
   ScrollController scrollController = new ScrollController();
-  // ignore: non_constant_identifier_names
+  Future _F_jobs;
   call_api_newJob()async{
     Api_findjobs api_jobs = new Api_findjobs("/api/job-news/approved-job-news",  {
       '': "",
@@ -32,7 +32,7 @@ String a = luong.substring(0,luong.length-6);
   @override
   void initState() {
     canCall = true;
-
+_F_jobs = call_api_newJob();
     // TODO: implement initState
     super.initState();
   }
@@ -48,7 +48,7 @@ String a = luong.substring(0,luong.length-6);
         // ),
         FutureBuilder(
             future:
-            call_api_newJob(),
+            _F_jobs,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 return Padding(

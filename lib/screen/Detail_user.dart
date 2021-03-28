@@ -10,6 +10,8 @@ import 'package:find_jobs/layout_profile/Profile_below.dart';
 import 'package:find_jobs/model/Option.dart';
 import 'package:find_jobs/screen/Change_password.dart';
 import 'package:find_jobs/screen/HomeScreen.dart';
+import 'package:find_jobs/screen/LoginScreen.dart';
+import 'package:find_jobs/screen/Search_keywword.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +39,7 @@ class _profile extends State<profile> {
   bool _isVisible = true;
   bool h = false;
   String contact;
+  Future _detail;
   call_api_detail()async{
     Api_findjobs a = new Api_findjobs(widget.my_acc?"/api/users/details-get-id":"/api/users/details-get-id", {
       //'userId': ,
@@ -64,8 +67,10 @@ var res = await a.postMethod();
     }
 
   }
+
   @override
   void initState() {
+    _detail = call_api_detail();
     scrollControllers.addListener(() {
       if (scrollControllers.position.userScrollDirection ==
           ScrollDirection.reverse) {
@@ -84,31 +89,9 @@ var res = await a.postMethod();
           });
       }
     });
-    // solan =0;
-    // super.initState();
-    // list_exp.clear();
-    // list_edu.clear();
-    //call_api_detail();
     print('innit');
   }
-  // void Action(String choice){
-  //
-  //   if(choice == Option.signout||choice == "Đăng nhập"){
-  //     removeValues();
-  //     Navigator.pushReplacement(
-  //         context, new MaterialPageRoute(builder: (context) => dangnhap() ));
-  //
-  //   }else if(choice == Option.listus){
-  //     Navigator.push(
-  //         context, new MaterialPageRoute(builder: (context) => job_apply() ));
-  //
-  //   }
-  //   else if(choice == Option.find_jobs){
-  //     Navigator.push(
-  //         context, new MaterialPageRoute(builder: (context) => Job_Find_People_Page() ));
-  //
-  //   }
-  // }
+
   ontapbottom (int index){
     setState(() {
       if (index == 0) {
@@ -122,23 +105,22 @@ var res = await a.postMethod();
             context, new MaterialPageRoute(builder: (context) => profile(my_acc: true,)));
       }
       if (index == 1) {
-        // Navigator.push(
-        //     context, new MaterialPageRoute(builder: (context) => Job_Find_People_Page()));
+        Navigator.push(
+            context, new MaterialPageRoute(builder: (context) => Search_keywword()));
       }
     });
   }
   void Action(String choice){
-
     if(choice == Option.doi_mat_khau){
       Navigator.push(
           context, new MaterialPageRoute(builder: (context) => Change_password() ));
-
     }
-    // else if(choice == Option.listus){
-    //   Navigator.push(
-    //       context, new MaterialPageRoute(builder: (context) => job_apply() ));
-    //
-    // }
+    else if(choice == Option.dang_xuat){
+      removeValues();
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+              (Route<dynamic> route) => false);
+    }
     // else if(choice == Option.find_jobs){
     //   Navigator.push(
     //       context, new MaterialPageRoute(builder: (context) => Job_Find_People_Page() ));
@@ -148,7 +130,7 @@ var res = await a.postMethod();
   @override
   Widget build(BuildContext context) {
     sharedPrefs.init();
-call_api_detail();
+_detail = call_api_detail();
     double mda = MediaQuery.of(context).size.width;
     return Scaffold(
       floatingActionButton: ButtonPair( s: scrollControllers,
@@ -204,7 +186,7 @@ call_api_detail();
           //         MyApp()), (Route<dynamic> route) => false);
         },
         child: FutureBuilder(
-            future: call_api_detail(),
+            future: _detail,
             builder: (context, snapshot){
               return  snapshot.hasData?
               NestedScrollView(

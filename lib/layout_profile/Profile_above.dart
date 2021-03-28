@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:badges/badges.dart';
 import 'package:find_jobs/helper/Preferences.dart';
+import 'package:find_jobs/layout_profile/Edit_skill.dart';
 import 'package:find_jobs/layout_profile/Tittle_divider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -81,10 +82,61 @@ String birthday(String fromdata){
    }
    else
    {
-     t += fromdata[i]['skillName'].toString()+",";
+     t += fromdata[i]['skillName'].toString()+", ";
    }
  }
  return t ;
+  }
+  show_dialog(){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SingleChildScrollView(
+            child: Dialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius:BorderRadius.circular(20.0),
+
+              ), //this right here
+              child: SingleChildScrollView(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        Colors.green,
+                        Colors.blue,
+                      ],
+                    ),
+                    borderRadius:BorderRadius.circular(10),
+                  ),
+
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Text("Chọn kỹ năng",
+                              style:TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),),
+                          ),
+                          Edit_skill()
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
   }
   @override
   Widget build(BuildContext context) {
@@ -349,10 +401,24 @@ String birthday(String fromdata){
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Kỹ năng chuyên môn:" ,style: TextStyle(
-                        fontSize: mda/25,
-                        fontWeight: FontWeight.bold
-                    ),),
+                    Row(
+                      children: [
+                        Text("Kỹ năng chuyên môn:" ,style: TextStyle(
+                            fontSize: mda/25,
+                            fontWeight: FontWeight.bold
+                        ),),
+                        widget.my_acc?GestureDetector(
+                          onTap: (){
+                            show_dialog();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                            child: Icon(Icons.edit,
+                            size: 15,),
+                          ),
+                        ):Container(),
+                      ],
+                    ),
                     Container(
                       width: mda/1.5,
                       child: Text(widget.data['data']['jobSkills'].length==0?"chưa cập nhật"
