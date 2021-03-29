@@ -4,6 +4,7 @@ import 'package:find_jobs/screen/HomeScreen.dart';
 import 'package:find_jobs/screen/LoginScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'helper/Preferences.dart';
 
@@ -78,18 +79,20 @@ print('aaaa2');
   @override
   Widget build(BuildContext context) {
     sharedPrefs.init();
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
+      body: MultiRepositoryProvider(
 
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Image.asset("assets/logo.png")
+        providers: [
+
+        ],
+        child: MultiBlocProvider(
+
+          child: Center(
+            // Center is a layout widget. It takes a single child and positions it
+            // in the middle of the parent.
+            child: Image.asset("assets/logo.png")
+          ),
+        ),
       ),
      // This trailing comma makes auto-formatting nicer for build methods.
     );
