@@ -7,6 +7,7 @@ import 'package:find_jobs/item_app/BottomNavigation.dart';
 import 'package:find_jobs/item_app/Buttton_pair.dart';
 import 'package:find_jobs/layout_profile/Profile_above.dart';
 import 'package:find_jobs/layout_profile/Profile_below.dart';
+import 'package:find_jobs/layout_profile/Update_profile.dart';
 import 'package:find_jobs/model/Option.dart';
 import 'package:find_jobs/screen/Change_password.dart';
 import 'package:find_jobs/screen/HomeScreen.dart';
@@ -273,13 +274,9 @@ _detail = call_api_detail();
                                 children: [
                                   GestureDetector(
                                     onTap: (){
-                                      // Navigator.pushReplacement(context,
-                                      //     new MaterialPageRoute(builder: (context) => edit_information(avatar:
-                                      //     user_infomationn.pro.avatar_name.toString()=="null"?"":"https://vieclamquangbinh.gov.vn/static"+
-                                      //         user_infomationn.pro.avatar_path
-                                      //         +user_infomationn.pro.avatar_name,
-                                      //       us: user_infomationn,
-                                      //     )));
+                                      widget.my_acc?Navigator.pushReplacement(context,
+                                          new MaterialPageRoute(builder: (context) => Update_profile(data: snapshot.data,
+                                          ))):null;
                                     },
                                     child: snapshot.data['data']['user']['avatarUrl'].toString()=="null"?Stack(
                                       alignment: AlignmentDirectional.center,

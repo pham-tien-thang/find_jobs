@@ -57,6 +57,9 @@ String birthday(String fromdata){
     if(fromdata=="3"){
       return "Free lance";
     }
+    if(fromdata=="4"){
+      return "Thực tập";
+    }
     else return"Không rõ";
   }
   String graduate(String fromdata){
