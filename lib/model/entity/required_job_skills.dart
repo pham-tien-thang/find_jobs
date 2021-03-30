@@ -5,13 +5,11 @@ part 'required_job_skills.g.dart';
 
 @JsonSerializable()
 class RequiredJobSkill{
-
   @JsonKey()
   int id;
 
   @JsonKey()
   String skillName;
-
 
   RequiredJobSkill({this.id, this.skillName});
 

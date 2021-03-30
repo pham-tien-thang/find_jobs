@@ -9,8 +9,6 @@ import 'package:find_jobs/layout_home/Header_home.dart';
 import 'package:find_jobs/layout_home/Newest_candicate.dart';
 import 'package:find_jobs/layout_home/Newest_jobs.dart';
 import 'package:find_jobs/layout_home/Slider.dart';
-import 'package:find_jobs/main.dart';
-import 'package:find_jobs/screen/LoginScreen.dart';
 import 'package:find_jobs/screen/Search_keywword.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';

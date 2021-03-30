@@ -4,6 +4,7 @@ import 'package:find_jobs/network/api_client.dart';
 import 'package:find_jobs/repositories/job_repository.dart';
 import 'package:find_jobs/screen/HomeScreen.dart';
 import 'package:find_jobs/screen/LoginScreen.dart';
+import 'package:find_jobs/screen/job_detail/job_detail_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -88,13 +89,21 @@ class _MyHomePageState extends State<MyHomePage> {
       body: MultiRepositoryProvider(
         providers: [
           RepositoryProvider<JobRepository>(create: (context) {
-            return JobRepositoryIplm(apiClient: _apiClient);
+            return JobRepositoryIplm( _apiClient);
           })
         ],
-        child: Center(
-            // Center is a layout widget. It takes a single child and positions it
-            // in the middle of the parent.
-            child: Image.asset("assets/logo.png")),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<JobDetailCubit>(create: (context){
+              final jobRepository = RepositoryProvider.of<JobRepository>(context);
+              return JobDetailCubit(jobRepository);
+            })
+          ],
+          child: Center(
+              // Center is a layout widget. It takes a single child and positions it
+              // in the middle of the parent.
+              child: Image.asset("assets/logo.png")),
+        ),
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
     );

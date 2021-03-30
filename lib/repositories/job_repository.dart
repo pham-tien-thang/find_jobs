@@ -8,16 +8,12 @@ abstract class JobRepository{
 }
 class JobRepositoryIplm extends JobRepository{
 
-  ApiClient _apiClient;
+  final ApiClient _apiClient;
 
-
-  JobRepositoryIplm({ApiClient apiClient}){
-    _apiClient = apiClient;
-  }
+  JobRepositoryIplm(this._apiClient) : assert(_apiClient != null);
 
   @override
   Future<JobDetailEntity> getJobDetail(JobDetailParam param) async {
     return await _apiClient.getJobDetail(param.toJson());
   }
-
 }

@@ -321,8 +321,12 @@ class _drawer extends State<Drawer_findjobs> {
               Container(
                 width: 300,
                 height: 35,
-                child: FlatButton(
-                  child:  Container(
+                child: GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => JobDetailPage(id: 1,)));
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(left: 16),
                     width: 300,
                     height: 35,
                     child: Row(
@@ -337,12 +341,6 @@ class _drawer extends State<Drawer_findjobs> {
                       ],
                     ),
                   ),
-                  //color: Colors.blue,
-                  textColor: Colors.white,
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => JobDetailPage()));
-
-                  },
                 ),
               ),
               Divider(),
