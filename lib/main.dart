@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:find_jobs/network/api_client.dart';
+import 'package:find_jobs/repositories/job_repository.dart';
 import 'package:find_jobs/screen/HomeScreen.dart';
 import 'package:find_jobs/screen/LoginScreen.dart';
 import 'package:flutter/cupertino.dart';
@@ -56,23 +58,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Timer _timer;
-  void chuyen(){  _timer = new Timer(const Duration(milliseconds: 3000), () {
-    print(sharedPrefs.check.toString());
-      sharedPrefs.check?
-    Navigator.pushReplacement(
-        context, new MaterialPageRoute(builder: (context) => HomeScreen()))
-        :
-    Navigator.pushReplacement(
-        context, new MaterialPageRoute(builder: (context) => LoginScreen()))
-    ;
+  ApiClient _apiClient;
 
-  });}
-@override
+  Timer _timer;
+
+  void chuyen() {
+    _timer = new Timer(const Duration(milliseconds: 3000), () {
+      print(sharedPrefs.check.toString());
+      sharedPrefs.check
+          ? Navigator.pushReplacement(context,
+              new MaterialPageRoute(builder: (context) => HomeScreen()))
+          : Navigator.pushReplacement(context,
+              new MaterialPageRoute(builder: (context) => LoginScreen()));
+    });
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
-chuyen();
-print('aaaa2');
+    chuyen();
+    print('aaaa2');
     super.initState();
   }
 
@@ -81,20 +86,17 @@ print('aaaa2');
     sharedPrefs.init();
     return Scaffold(
       body: MultiRepositoryProvider(
-
         providers: [
-
+          RepositoryProvider<JobRepository>(create: (context) {
+            return JobRepositoryIplm(apiClient: _apiClient);
+          })
         ],
-        child: MultiBlocProvider(
-
-          child: Center(
+        child: Center(
             // Center is a layout widget. It takes a single child and positions it
             // in the middle of the parent.
-            child: Image.asset("assets/logo.png")
-          ),
-        ),
+            child: Image.asset("assets/logo.png")),
       ),
-     // This trailing comma makes auto-formatting nicer for build methods.
+      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
