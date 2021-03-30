@@ -9,19 +9,12 @@ import 'package:find_jobs/layout_home/Header_home.dart';
 import 'package:find_jobs/layout_home/Newest_candicate.dart';
 import 'package:find_jobs/layout_home/Newest_jobs.dart';
 import 'package:find_jobs/layout_home/Slider.dart';
-<<<<<<< HEAD
-import 'package:find_jobs/screen/Search_keywword.dart';
-=======
-import 'package:find_jobs/main.dart';
-import 'package:find_jobs/screen/LoginScreen.dart';
->>>>>>> parent of 0c03594 (thang commit profile)
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-
 import 'Detail_user.dart';
 import 'SignUp.dart';
 
