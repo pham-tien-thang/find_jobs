@@ -345,8 +345,8 @@ onWillPop: (){show_dialog();},
                       color: rd ? Colors.green.shade700 : Colors.black45,
                       textColor: Colors.white,
                       onPressed: () {
-                        call_login();
-                       // Navigator.pushReplacement(context, new MaterialPageRoute(builder: (context)=>HomeScreen()));
+                       // call_login();
+                        Navigator.pushReplacement(context, new MaterialPageRoute(builder: (context)=>HomeScreen()));
                       },
                     ),
                   ),

@@ -52,27 +52,13 @@ call_change() async{
   Api_findjobs login = new Api_findjobs(
       "/api/users/change-password",
       {
-        'userId': sharedPrefs.user_id,
-        'oldPassword': mat_khau_cu.text.toString(),
-        'newPassword': mat_khau_moi.text.toString(),
+        'userId': "",
+        'oldPassword': "pw.text",
+        'newPassword': "pw.text",
       }
   );
   var res = await login.postMethod();
-  if(!res['result']){
-    showToast(res['message'], context, Colors.greenAccent, Icons.check);
-    setState(() {
-      rd = true;
-    });
-  }
-  else if(res['result']){
-    showToast(res['message'], context, Colors.red, Icons.cancel);
-    setState(() {
-      rd = true;
-    });
-    Navigator.of(context).pop();
-  }
-  print(res);
-  }
+}
 vaidate(){
   if(mat_khau_cu.text.length<1){
     showToast("Nhập mật khẩu cũ", context, Colors.red, Icons.cancel);

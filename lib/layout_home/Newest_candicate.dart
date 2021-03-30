@@ -13,7 +13,7 @@ class Newest_Candicate extends StatefulWidget {
 // ignore: camel_case_types
 class _Newest_CandicateState extends State<Newest_Candicate> {
   ScrollController scrollController = new ScrollController();
- Future _newCandicate;
+  // ignore: non_constant_identifier_names
 call_api_newCandicate()async{
   Api_findjobs api_candicate = new Api_findjobs("/api/users",  {
     '': "",
@@ -36,17 +36,14 @@ String tuoi(int milis){
   @override
   void initState() {
     canCall = true;
-    _newCandicate = call_api_newCandicate();
+
     // TODO: implement initState
     super.initState();
   }
-@override
-  void dispose() {
-    super.dispose();
-  }
+
   @override
   Widget build(BuildContext context) {
-print("chay build");
+
     return Column(
       children: [
         // Padding(
@@ -55,8 +52,8 @@ print("chay build");
         // ),
         FutureBuilder(
             future:
-            _newCandicate,
-            builder: ( context,  snapshot) {
+            call_api_newCandicate(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 return Padding(
                   padding: const EdgeInsets.only(right: 40),
