@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:find_jobs/network/api_client.dart';
+import 'package:find_jobs/repositories/job_repository.dart';
 import 'package:find_jobs/screen/HomeScreen.dart';
 import 'package:find_jobs/screen/LoginScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'helper/Preferences.dart';
 
@@ -55,43 +58,45 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Timer _timer;
-  void chuyen(){  _timer = new Timer(const Duration(milliseconds: 3000), () {
-    print(sharedPrefs.check.toString());
-      sharedPrefs.check?
-    Navigator.pushReplacement(
-        context, new MaterialPageRoute(builder: (context) => HomeScreen()))
-        :
-    Navigator.pushReplacement(
-        context, new MaterialPageRoute(builder: (context) => LoginScreen()))
-    ;
+  ApiClient _apiClient;
 
-  });}
-@override
+  Timer _timer;
+
+  void chuyen() {
+    _timer = new Timer(const Duration(milliseconds: 3000), () {
+      print(sharedPrefs.check.toString());
+      sharedPrefs.check
+          ? Navigator.pushReplacement(context,
+              new MaterialPageRoute(builder: (context) => HomeScreen()))
+          : Navigator.pushReplacement(context,
+              new MaterialPageRoute(builder: (context) => LoginScreen()));
+    });
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
-chuyen();
-print('aaaa2');
+    chuyen();
+    print('aaaa2');
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     sharedPrefs.init();
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Image.asset("assets/logo.png")
+      body: MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider<JobRepository>(create: (context) {
+            return JobRepositoryIplm(apiClient: _apiClient);
+          })
+        ],
+        child: Center(
+            // Center is a layout widget. It takes a single child and positions it
+            // in the middle of the parent.
+            child: Image.asset("assets/logo.png")),
       ),
-     // This trailing comma makes auto-formatting nicer for build methods.
+      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
