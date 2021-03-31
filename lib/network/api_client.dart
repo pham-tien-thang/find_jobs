@@ -9,6 +9,6 @@ part 'api_client.g.dart';
 abstract class ApiClient{
   factory ApiClient(Dio dio, {String baseUrl}) = _ApiClient;
 
-  @GET("/api/job-news/details")
+  @POST("/api/job-news/details")
   Future<JobDetailEntity> getJobDetail(@Body() Map<String, dynamic> data);
 }

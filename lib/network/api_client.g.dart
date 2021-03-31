@@ -27,7 +27,7 @@ class _ApiClient implements ApiClient {
         '/api/job-news/details',
         queryParameters: queryParameters,
         options: RequestOptions(
-            method: 'GET',
+            method: 'POST',
             headers: <String, dynamic>{},
             extra: _extra,
             baseUrl: baseUrl),
