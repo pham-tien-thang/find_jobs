@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
 import 'dart:async';
+import 'package:find_jobs/helper/Api_findjobs.dart';
 import 'package:find_jobs/helper/Toast.dart';
 import 'package:find_jobs/layout_profile/Profile_below.dart';
 import 'package:find_jobs/screen/Detail_user.dart';
@@ -39,34 +40,124 @@ class _Update_profile extends State<Update_profile> {
   // String auth = sharedPrefs.auth;
   // int id = sharedPrefs.user_id;
    TextEditingController name_us = new TextEditingController();
+   TextEditingController mail_us = new TextEditingController();
   TextEditingController phone_us = new TextEditingController();
   TextEditingController address_us = new TextEditingController();
   TextEditingController salary_us = new TextEditingController();
   TextEditingController exp_us = new TextEditingController();
   TextEditingController description_us = new TextEditingController();
   TextEditingController work_need_us = new TextEditingController();
+   TextEditingController careerObjective =  new TextEditingController();
+   List<DropdownMenuItem<String>> _genderdropDownMenuItems ;
+   List<DropdownMenuItem<String>> _tinhdropDownMenuItems ;
+   List<DropdownMenuItem<String>> _huyendropDownMenuItems ;
+   List<DropdownMenuItem<String>> _xadropDownMenuItems ;
+   List<DropdownMenuItem<String>> _degreedropDownMenuItems ;
+   List<DropdownMenuItem<String>> _typedropDownMenuItems ;
   String current_gender;
    String current_tinh;
-   String current_huyen;
-   String current_xa;
+   String current_huyen="null";
+   String current_xa="null";
    String current_degree;
    String current_typeofwork;
+   String id_xa_selec;
+   Future f_tinh;
+   List tinh = [];
+   List huyen = [];
+   List xa = [];
+   List id_tinh=[];
+   List id_huyen=[];
+   List id_xa=[];
+   bool loading = true;
+   call_tinh()async{
+     setState(() {
+       loading = true;
+       tinh.clear();
+       id_tinh.clear();
+       huyen.clear();
+       id_huyen.clear();
+       xa.clear();
+       id_xa.clear();
+     });
+     Api_findjobs get_api_tinh = new Api_findjobs("/api/states-provinces", {
+       "":""
+     },);
+     var res = await get_api_tinh.getMethod();
+for(int i = 0 ; i<res['stateProvinces'].length;i++){
+  tinh.add(res['stateProvinces'][i]['name']);
+  id_tinh.add(res['stateProvinces'][i]['stateProvinceId']);
+}
+     setState(() {
+       current_tinh = tinh[2].toString();
+       _tinhdropDownMenuItems = gettinhDropDownMenuItems();
+     });
+     call_huyen("01");
+     //call_huyen('06');
+     return res;
+   }
+   call_huyen(String idtinh)async{
+     setState(() {
+       loading = true;
+       huyen.clear();
+       id_huyen.clear();
+       xa.clear();
+       id_xa.clear();
+     });
+     Api_findjobs get_api_huyen = new Api_findjobs("/api/districts/get-districts-by-state-province-id", {
+       "stateProvinceId":idtinh
+     },);
+     var res = await get_api_huyen.postMethod();
+     print(res);
+     for(int i = 0 ; i<res['districts'].length;i++){
+       huyen.add(res['districts'][i]['name']);
+       id_huyen.add(res['districts'][i]['districtId']);
+     }
+     setState(() {
+       current_huyen = huyen[0].toString();
+       _huyendropDownMenuItems = gethuyenDropDownMenuItems();
+       for(int i = 0; i<id_huyen.length;i++){
+         if(huyen[i].toString()==current_huyen){
+           String id = id_huyen[i];
+           call_xa(id);
+         }
+       };
+     });
+    // call_xa("7");
+     //18
+     //7
+     return res;
+   }
+   call_xa(String idxa)async{
+     setState(() {
+       loading = true;
+       xa.clear();
+       id_xa.clear();
+     });
+     Api_findjobs get_api_xa = new Api_findjobs("/api/subdistricts/get-subdistricts-by-district-id", {
+       "districtId":idxa
+     },);
+     var res = await get_api_xa.postMethod();
+     print(res);
+     for(int i = 0 ; i<res['subdistricts'].length;i++){
+       xa.add(res['subdistricts'][i]['name']);
+       id_xa.add(res['subdistricts'][i]['subdistrictId']);
+     }
+     setState(() {
+       current_xa = xa[0].toString();
+       _xadropDownMenuItems = getxaDropDownMenuItems();
+       id_xa_selec = id_xa[0].toString();
+       res!=null?loading = false:loading = true;
+     });
+     //  call_huyen(63);
+     //18
+     //7
+     return res;
+   }
    List gender = [
      "Nam",
      "Nữ",
    ];
-   List tinh = [
-     "1",
-     "2",
-   ];
-   List huyen = [
-     "1",
-     "2",
-   ];
-   List xa = [
-     "1",
-     "2",
-   ];
+
    List degree = [
      "Trên đại học",
      "Đại học",
@@ -78,12 +169,7 @@ class _Update_profile extends State<Update_profile> {
      "Part time",
      "Freelance"
    ];
-   List<DropdownMenuItem<String>> _genderdropDownMenuItems ;
-   List<DropdownMenuItem<String>> _tinhdropDownMenuItems ;
-   List<DropdownMenuItem<String>> _huyendropDownMenuItems ;
-   List<DropdownMenuItem<String>> _xadropDownMenuItems ;
-   List<DropdownMenuItem<String>> _degreedropDownMenuItems ;
-   List<DropdownMenuItem<String>> _typedropDownMenuItems ;
+
    List<DropdownMenuItem<String>> getgenderDropDownMenuItems() {
      List<DropdownMenuItem<String>> items = new List();
      for (String de in gender) {
@@ -137,26 +223,91 @@ class _Update_profile extends State<Update_profile> {
            ),
          ));
    }
+   String birthday(String fromdata){
+    // DateTime now = new DateTime.now();
+    // final DateFormat formatter = DateFormat('dd/MM/yyyy');
+     var dateConvert = new DateTime.fromMillisecondsSinceEpoch(
+         int.parse(fromdata) );
+     String t = f.format(dateConvert);
+     return t;
+   }
+   String hinhthuc(String fromdata){
+     if(fromdata=="1"){
+       return"Full time";
+     }
+     if(fromdata=="2"){
+       return "Part time";
+     }
+     if(fromdata=="3"){
+       return "Free lance";
+     }
+     else return"Full time";
+   }
+   String bangcap(String id){
+     if(id=="1"){
+       return"Trên đại học";
+     }
+     if(id=="2"){
+       return "Trên đại học";
+     }
+     if(id=="3"){
+       return "Đại học";
+     }
+     if(id=="4"){
+       return "Cao đẳng";
+     }
+     else return"Trên đại học";
+   }
+   String gioitinh(String g){
+     if(g=="1"){
+       return "Nam";
+     }
+     else return "Nữ";
+   }
+settext(){
+     name_us.text = widget.data['data']['user']['fullName'];
 
+     phone_us.text =  widget.data['data']['user']['phone'];
+
+     current_gender = widget.data['data']['user']['genderId'].toString() =="null"?gender[0].toString():gioitinh(widget.data['data']['user']['genderId'].toString());
+
+    mail_us.text =  widget.data['data']['user']['email'];
+
+    B_date.text  = widget.data['data']['user']['birthdayInMilliseconds'].toString()=="null"
+        ?"01-1-2000":
+    birthday(widget.data['data']['user']['birthdayInMilliseconds'].toString());
+
+    current_degree = widget.data['data']['user']['graduatedEducationId'].toString()=="null"?
+     degree[0].toString()
+     :bangcap(widget.data['data']['user']['graduatedEducationId'].toString());
+
+     current_typeofwork = widget.data['data']['user']['typeOfWorkId'].toString()=="null"? typeofwork[0].toString()
+         :hinhthuc(widget.data['data']['user']['typeOfWorkId'].toString());
+
+     salary_us.text = widget.data['data']['user']['expectedSalaryInVnd'].toString()=="null"
+     ?"":widget.data['data']['user']['expectedSalaryInVnd'].toString();
+
+     exp_us.text = widget.data['data']['user']['yearsOfExperiences'].toString()=="null"?"":widget.data['data']['user']['yearsOfExperiences'].toString();
+     description_us.text = widget.data['data']['user']['resumeSummary'].toString()=="null"?"":widget.data['data']['user']['resumeSummary'].toString();
+     careerObjective.text = widget.data['data']['user']['careerObjective'].toString()=="null"?"":widget.data['data']['user']['careerObjective'].toString();
+
+}
 
   @override
   void initState() {
-current_gender = gender[0].toString();
+     settext();
+f_tinh = call_tinh();
 _genderdropDownMenuItems = getgenderDropDownMenuItems();
 //
-current_tinh = tinh[0].toString();
-_tinhdropDownMenuItems = gettinhDropDownMenuItems();
+// current_tinh = tinh[0].toString();
 //
-current_huyen = huyen[0].toString();
 _huyendropDownMenuItems = gethuyenDropDownMenuItems();
 //
-current_xa = xa[0].toString();
 _xadropDownMenuItems = getxaDropDownMenuItems();
 //
-    current_degree = degree[0].toString();
     _degreedropDownMenuItems = getdegreeDropDownMenuItems();
     //
-    current_typeofwork = typeofwork[0].toString();
+  
     _typedropDownMenuItems = gettypeDropDownMenuItems();
     super.initState();
   }
@@ -167,18 +318,46 @@ _xadropDownMenuItems = getxaDropDownMenuItems();
     });
   }
    void changedtinhDropDownItem(String selectedCity) {
-     setState(() {
+     loading?null:setState(() {
        current_tinh = selectedCity;
+       for(int i = 0; i<id_tinh.length;i++){
+         if(tinh[i].toString()==current_tinh){
+           String id = id_tinh[i].toString();
+           print(id);
+           call_huyen(id);
+           break;
+         }
+       };
+
      });
    }
    void changedhuyenDropDownItem(String selectedCity) {
+     loading?print("chon huyen true"):
      setState(() {
        current_huyen = selectedCity;
-     });
+       for(int i = 0; i<id_huyen.length;i++){
+         if(huyen[i].toString()==current_huyen){
+           String id = id_huyen[i].toString();
+           print(id);
+           call_xa(id);
+           break;
+         }
+       };
+     }
+     );
    }
    void changedxaDropDownItem(String selectedCity) {
-     setState(() {
+     loading?null:setState(() {
        current_xa = selectedCity;
+       for(int i = 0; i<id_xa.length;i++){
+         if(xa[i].toString()==current_xa){
+           String id = id_xa[i].toString();
+           id_xa_selec = id;
+           print(id);
+           break;
+         }
+       };
+
      });
    }
    void changeddegreeDropDownItem(String selectedCity) {
@@ -297,7 +476,7 @@ _xadropDownMenuItems = getxaDropDownMenuItems();
 
         },
         child: FutureBuilder(
-          future: null,
+          future:null ,
           builder: (context, snapshot) {
             //solan==0?FocusScope.of(context).unfocus():null;
             return true
@@ -334,7 +513,7 @@ _xadropDownMenuItems = getxaDropDownMenuItems();
                                         : CircleAvatar(
                                       radius: mda / 6,
                                       backgroundImage:
-                                      NetworkImage(widget.avatar),
+                                      NetworkImage(widget.data['data']['user']['avatarUrl'].toString()),
                                     ))
                                     :
                                 CircleAvatar(
@@ -373,6 +552,7 @@ _xadropDownMenuItems = getxaDropDownMenuItems();
                                   textColor: Colors.white,
                                   onPressed: () {
                                     showToast("chưa làm", context, Colors.red, Icons.android);
+                                   // call_huyen("06");
                                   },
                                 ),
                                 Padding(
@@ -565,8 +745,8 @@ _xadropDownMenuItems = getxaDropDownMenuItems();
                                   ),
                                 ),
                                 TextField(
-                                  //controller: phone_us,
-                                  maxLength: 20,
+                                  controller: mail_us,
+                                  maxLength: 50,
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
                                     border: new OutlineInputBorder(
@@ -593,31 +773,67 @@ _xadropDownMenuItems = getxaDropDownMenuItems();
                       Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("ĐỊA CHỈ",
-                            style: TextStyle(
-                                fontSize: mda / 21,
-                                fontWeight: FontWeight.bold),
+                          Center(
+                            child: Text("ĐỊA CHỈ",
+                              style: TextStyle(
+                                  fontSize: mda / 21,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              DropdownButton(
-                                value: current_tinh,
-                                items: _tinhdropDownMenuItems,
-                                onChanged: changedtinhDropDownItem,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Tỉnh/TP :",style:TextStyle(
+                                        fontSize: mda / 21,
+                                        fontWeight: FontWeight.bold),),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Quận/Huyện :",style:TextStyle(
+                                        fontSize: mda / 21,
+                                        fontWeight: FontWeight.bold),),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Xã/Phường :",style:TextStyle(
+                                        fontSize: mda / 21,
+                                        fontWeight: FontWeight.bold),),
+                                  ),
+                                ],
                               ),
-                              DropdownButton(
-                                value: current_huyen,
-                                items: _huyendropDownMenuItems,
-                                onChanged: changedhuyenDropDownItem,
+                              FutureBuilder(
+                                future: f_tinh,
+                                builder:  (context,snapshot){
+                                  return snapshot.hasData ? Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      DropdownButton(
+                                        value: current_tinh,
+                                        items: _tinhdropDownMenuItems,
+                                        onChanged: changedtinhDropDownItem,
+                                      ),
+                                      DropdownButton(
+                                        value: current_huyen,
+                                        items: _huyendropDownMenuItems,
+                                        onChanged: changedhuyenDropDownItem,
+                                      ),
+                                      DropdownButton(
+                                        value: current_xa,
+                                        items: _xadropDownMenuItems,
+                                        onChanged: changedxaDropDownItem,
+                                      ),
+                                    ],
+                                  ):Center(child: CircularProgressIndicator());
+                                },
                               ),
-                              DropdownButton(
-                                value: current_xa,
-                                items: _xadropDownMenuItems,
-                                onChanged: changedxaDropDownItem,
-                              ),
+
                             ],
-                          ),
+                          )
                         ],
                       ),
                       //bằng cấp
@@ -782,6 +998,8 @@ _xadropDownMenuItems = getxaDropDownMenuItems();
                                 TextField(
                                   maxLength: 1000,
                                   controller: description_us,
+                                  keyboardType: TextInputType.multiline,
+                                  maxLines: null,
                                   decoration: InputDecoration(
                                     border: new OutlineInputBorder(
                                         borderSide: new BorderSide(color: Colors.grey)),
@@ -822,8 +1040,9 @@ _xadropDownMenuItems = getxaDropDownMenuItems();
                                 ),
                                 //
                                 TextField(
-                                  maxLength: 100,
-                                  controller: exp_us,
+                                  maxLength: 1000,
+                                  controller: careerObjective,
+                                  maxLines: null,
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
                                     border: new OutlineInputBorder(

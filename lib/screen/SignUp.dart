@@ -290,7 +290,7 @@ class _Mydangky extends State<Mydangky> {
                           child: Icon(
                             Icons.lock,
                             size: mda / 15,
-                            color:  _obscuretext?Colors.green:Colors.greenAccent,
+                            color:  _obscuretext?Colors.green.shade700:Colors.green,
                           ),
                         ),
                       ),
@@ -333,7 +333,7 @@ class _Mydangky extends State<Mydangky> {
                           child: Icon(
                             Icons.lock,
                             size: mda / 15,
-                            color: _obscuretext2?Colors.green:Colors.greenAccent,
+                            color: _obscuretext2?Colors.green.shade700:Colors.green,
                           ),
                         ),
                       ),

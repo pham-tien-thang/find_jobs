@@ -14,7 +14,7 @@ class Api_findjobs {
     var params = this.param;
     Response response = await post(url2, body: params);
     final res = jsonDecode(response.body);
-    print(res);
+  // print(res);
     return res;
   }
   getMethod() async {
@@ -22,7 +22,7 @@ class Api_findjobs {
    // var params = this.param;
     Response response = await get(url2);
     final res = jsonDecode(response.body);
-    print(res);
+   // print(res);
     return res;
   }
 }
