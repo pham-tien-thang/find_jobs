@@ -8,7 +8,7 @@ part of 'job_detail_param.dart';
 
 JobDetailParam _$JobDetailParamFromJson(Map<String, dynamic> json) {
   return JobDetailParam(
-    jobNewsId: json['jobNewsId'] as int,
+    jobNewsId: json['jobNewsId'] as String,
   );
 }
 

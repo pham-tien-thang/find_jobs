@@ -17,7 +17,7 @@ class JobDetailCubit extends Cubit<JobDetailState> {
   void getJobDetail(int id)async{
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try{
-      final param = JobDetailParam(jobNewsId: id);
+      final param = JobDetailParam(jobNewsId: id.toString());
       JobDetailEntity response = await _jobRepository.getJobDetail(param);
       if(response.result == true){
         emit(state.copyWith(jobNewDetailEntity: response.jobNewDetailEntity,loadStatus: LoadStatus.SUCCESS));
