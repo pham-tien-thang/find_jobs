@@ -26,13 +26,7 @@ import 'SignUp.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Việc làm IT',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomeScreen(),
-    );
+    return MyHomeScreen();
   }
 }
 

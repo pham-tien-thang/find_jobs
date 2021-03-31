@@ -1,5 +1,6 @@
 import 'package:find_jobs/item_app/Drawer_findjobs.dart';
 import 'package:find_jobs/layout_home/Header_home.dart';
+import 'package:find_jobs/repositories/job_repository.dart';
 import 'package:find_jobs/screen/job_detail/job_detail_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +22,15 @@ class _JobDetailPageState extends State<JobDetailPage> {
 
   @override
   void initState() {
-    final authRepo = RepositoryProvider.of(context);
-    _jobDetailCubit = JobDetailCubit(authRepo);
+    final jobRepository = RepositoryProvider.of<JobRepository>(context);
+    _jobDetailCubit = JobDetailCubit(jobRepository);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _jobDetailCubit.close();
+    super.dispose();
   }
 
 

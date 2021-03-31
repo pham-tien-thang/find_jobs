@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:find_jobs/network/api_client.dart';
+import 'package:find_jobs/repositories/auth_repository.dart';
 import 'package:find_jobs/repositories/job_repository.dart';
 import 'package:find_jobs/screen/HomeScreen.dart';
 import 'package:find_jobs/screen/LoginScreen.dart';
@@ -18,33 +20,37 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: '/',
-      routes: {
-        // When navigating to the "/" route, build the FirstScreen widget.
-        '/': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
-        '/home': (context) => HomeScreen(),
-        // When navigating to the "/second" route, build the SecondScreen widget.
-        // '/second': (context) => SecondScreen(),
-      },
-      title: 'Việc làm It',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    ApiClient _apiClient = MyApp.getApiClient();
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<JobRepository>(create: (context) {
+          return JobRepositoryIplm(apiClient: _apiClient);
+        }),
+        RepositoryProvider<AuthRepository>(create: (context) {
+          return AuthRepositoryIplm(apiClient: _apiClient);
+        })
+      ],
+      child: MaterialApp(
+        initialRoute: '/',
+        routes: {
+          '/': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
+          '/home': (context) => HomeScreen(),
+        },
+        title: 'Việc làm It',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
       ),
     );
+  }
+
+  static ApiClient getApiClient() {
+    final dio = Dio();
+    dio.options.connectTimeout = 30000;
+    // dio.interceptors.add(ApiInterceptors());
+    final apiClient = ApiClient(dio, baseUrl: "https://find-job-app.herokuapp.com");
+    return apiClient;
   }
 }
 
@@ -89,6 +95,9 @@ class _MyHomePageState extends State<MyHomePage> {
         providers: [
           RepositoryProvider<JobRepository>(create: (context) {
             return JobRepositoryIplm(apiClient: _apiClient);
+          }),
+          RepositoryProvider<AuthRepository>(create: (context) {
+            return AuthRepositoryIplm(apiClient: _apiClient);
           })
         ],
         child: Center(
