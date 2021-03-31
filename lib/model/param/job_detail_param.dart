@@ -6,7 +6,7 @@ part 'job_detail_param.g.dart';
 class JobDetailParam{
 
   @JsonKey()
-  int jobNewsId;
+  String jobNewsId;
 
   JobDetailParam({this.jobNewsId});
 

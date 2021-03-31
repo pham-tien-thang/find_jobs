@@ -25,6 +25,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
     final jobRepository = RepositoryProvider.of<JobRepository>(context);
     _jobDetailCubit = JobDetailCubit(jobRepository);
     super.initState();
+    _jobDetailCubit.getJobDetail(1);
   }
 
   @override
@@ -42,7 +43,9 @@ class _JobDetailPageState extends State<JobDetailPage> {
         child: Column(
           children: [
             header(),
-
+            Container(
+              
+            ),
           ],
         ),
       ),
