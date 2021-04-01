@@ -17,6 +17,9 @@ class JobNewDetailEntity{
   String status;
 
   @JsonKey()
+  String avatarUrl;
+
+  @JsonKey()
   String typeOfWorkName;
 
   @JsonKey()
@@ -67,6 +70,7 @@ class JobNewDetailEntity{
   JobNewDetailEntity(
       {this.jobNewsId,
       this.ownerName,
+      this.avatarUrl,
       this.status,
       this.typeOfWorkName,
       this.companyName,
@@ -89,28 +93,4 @@ class JobNewDetailEntity{
   factory JobNewDetailEntity.fromJson(Map<String, dynamic> json) => _$JobNewDetailEntityFromJson(json);
 
   Map<String, dynamic> toJson() => _$JobNewDetailEntityToJson(this);
-// "jobNewsId": 1,
-  // "ownerName": "Trần Thị Bích Hạnh",
-  // "statusName": "Đã phê duyệt",
-  // "typeOfWorkName": "Full-time",
-  // "companyName": "Công ty cổ phần Giao Hàng Tiết Kiệm",
-  // "jobShortDescription": "Android Developer",
-  // "salaryInVnd": 12000000,
-  // "jobDescription": "– Xây dựng những sản phẩm hàng đầu với hệ điều hành Android trên nền tảng cơ sở dữ liệu người dùng lớn; làm việc cùng 1 đội ngũ chuyên nghiệp, dày dặn kinh nghiệm;\n\n– Đồng hành trực tiếp cùng Trưởng bộ phận, Quản lý dự án, đội ngũ Backend và UX trong môi trường linh hoạt, nhanh nhạy để tăng tiến độ phân phối sản phẩm;\n\n– Trực tiếp chủ động, tích cực tham gia vào quá trình triển khai dự án;\n\n– Đóng góp lớn vào lập trình mobile và chuyên môn kỹ thuật của toàn bộ tổ chức;",
-  // "subdistrictName": "Phường Mễ Trì",
-  // "districtName": "Quận Nam Từ Liêm",
-  // "stateProvinceName": "Thành phố Hà Nội",
-  // "detailAddress": "TÒA NHÀ GIAO HÀNG TIẾT KIỆM - SỐ 8 PHẠM HÙNG",
-  // "requiredNumberYearsOfExperiences": 1,
-  // "jobTitleName": "Nhân viên",
-  // "companySizeByNumberEmployees": 10000,
-  // "companyWebsite": "https://giaohangtietkiem.vn/",
-  // "companyEmail": "tuyendung.hn@ghtk.vn",
-  // "companyPhoneNumber": "02435720999",
-  // "requiredJobSkills": [
-  // {
-  // "id": 1,
-  // "skillName": "Lập trình di động"
-  // }
-  // ]
 }
