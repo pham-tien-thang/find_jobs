@@ -108,12 +108,13 @@ class _JobDetailPageState extends State<JobDetailPage> {
   _launchUrl(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
-    }else{
+    } else {
       throw 'could not launch $url';
     }
   }
 
-  Widget _buildFieldJobDetail(String title, String content,{bool isPressed = false}) {
+  Widget _buildFieldJobDetail(String title, String content,
+      {bool isPressed = false}) {
     return Column(
       children: [
         Container(
@@ -136,25 +137,29 @@ class _JobDetailPageState extends State<JobDetailPage> {
               ),
               Expanded(
                 child: GestureDetector(
-                  onTap: isPressed == true ? (){
-                    _launchUrl(content);
-                  } : (){},
+                  onTap: isPressed == true
+                      ? () {
+                          _launchUrl(content);
+                        }
+                      : () {},
                   child: Container(
-                    child:isPressed == true ?Text(
-                      content,
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 12,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ): Text(
-                      content,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    child: isPressed == true
+                        ? Text(
+                            content,
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 12,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          )
+                        : Text(
+                            content,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
                   ),
                 ),
               ),
@@ -190,7 +195,8 @@ class _JobDetailPageState extends State<JobDetailPage> {
             Container(
               width: 100,
               height: 100,
-              child: Image.network(jobNewDetailEntity?.avatarUrl) ?? Image.asset("assets/user.png"),
+              child: Image.network(jobNewDetailEntity?.avatarUrl) ??
+                  Image.asset("assets/user.png"),
             ),
             SizedBox(
               height: 8,
@@ -225,26 +231,26 @@ class _JobDetailPageState extends State<JobDetailPage> {
               height: 10,
             ),
             _buildFieldJobDetail(
-                'Ngành : ', jobNewDetailEntity.jobShortDescription),
-            SizedBox(
-              height: 10,
-            ),
-            _buildFieldJobDetail('Lương  : ',
-                saraly(jobNewDetailEntity?.salaryInVnd.toString())),
-            SizedBox(
-              height: 10,
-            ),
-            _buildFieldJobDetail(
-                'Mô tả công việc: ', jobNewDetailEntity?.jobDescription),
-            SizedBox(
-              height: 10,
-            ),
-            _buildFieldJobDetail('Địa chỉ : ',
-                '${jobNewDetailEntity.detailAddress} , ${jobNewDetailEntity.subdistrictName} , ${jobNewDetailEntity.districtName} , ${jobNewDetailEntity.stateProvinceName}'),
+                'Lĩnh vực : ', jobNewDetailEntity.jobShortDescription),
             SizedBox(
               height: 10,
             ),
             _buildFieldJobDetail('Vị trí : ', jobNewDetailEntity.jobTitleName),
+            SizedBox(
+              height: 10,
+            ),
+            _buildFieldJobDetail('Mức lương  : ',
+                saraly(jobNewDetailEntity?.salaryInVnd.toString())),
+            SizedBox(
+              height: 10,
+            ),
+            _buildColumnField(
+                'Mô tả công việc: ', jobNewDetailEntity?.jobDescription),
+            SizedBox(
+              height: 10,
+            ),
+            _buildColumnField('Địa chỉ : ',
+                '${jobNewDetailEntity.detailAddress} , ${jobNewDetailEntity.subdistrictName} , ${jobNewDetailEntity.districtName} , ${jobNewDetailEntity.stateProvinceName}'),
             SizedBox(
               height: 10,
             ),
@@ -259,7 +265,8 @@ class _JobDetailPageState extends State<JobDetailPage> {
               height: 10,
             ),
             _buildFieldJobDetail(
-                'Website : ', jobNewDetailEntity.companyWebsite,isPressed: true),
+                'Website : ', jobNewDetailEntity.companyWebsite,
+                isPressed: true),
             SizedBox(
               height: 10,
             ),
@@ -280,6 +287,40 @@ class _JobDetailPageState extends State<JobDetailPage> {
           ],
         ),
       ),
+    );
+  }
+
+  _buildColumnField(String title, String content) {
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 16),
+          alignment: Alignment.centerLeft,
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        SizedBox(height: 8,),
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 32),
+          child: Text(
+            content,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.black,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+        Divider(
+          color: Colors.grey,
+        ),
+      ],
     );
   }
 
@@ -308,15 +349,20 @@ class _JobDetailPageState extends State<JobDetailPage> {
               physics: NeverScrollableScrollPhysics(),
               itemCount: requiredJobSkills.length,
               itemBuilder: (context, index) {
-                return Container(
-                  child: Text(
-                    requiredJobSkills[index].skillName,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+                return Column(
+                  children: [
+                    Container(
+                      child: Text(
+                        requiredJobSkills[index].skillName,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     ),
-                  ),
+                    Divider(color: Colors.grey,)
+                  ],
                 );
               },
             ),
