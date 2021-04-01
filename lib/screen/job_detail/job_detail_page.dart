@@ -209,19 +209,19 @@ class _JobDetailPageState extends State<JobDetailPage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(
-              height: 8,
-            ),
-            Text(
-              jobNewDetailEntity?.status ?? "",
-              style: TextStyle(
-                color: jobNewDetailEntity?.status == "Đã phê duyệt"
-                    ? Colors.green
-                    : Colors.red,
-                fontSize: 12,
-                fontWeight: FontWeight.normal,
-              ),
-            ),
+            // SizedBox(
+            //   height: 8,
+            // ),
+            // Text(
+            //   jobNewDetailEntity?.status ?? "",
+            //   style: TextStyle(
+            //     color: jobNewDetailEntity?.status == "Đã phê duyệt"
+            //         ? Colors.green
+            //         : Colors.red,
+            //     fontSize: 12,
+            //     fontWeight: FontWeight.normal,
+            //   ),
+            // ),
             SizedBox(
               height: 30,
             ),
@@ -361,7 +361,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                         ),
                       ),
                     ),
-                    Divider(color: Colors.grey,)
+                    Divider(color: Colors.grey,),
                   ],
                 );
               },
