@@ -273,7 +273,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
               height: 10,
             ),
             _buildListJobSkills(
-                'Kỹ năng : ', jobNewDetailEntity?.requiredJobSkills),
+                'Kỹ năng yêu cầu : ', jobNewDetailEntity?.requiredJobSkills),
             SizedBox(
               height: 20,
             ),
