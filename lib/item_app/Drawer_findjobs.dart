@@ -340,8 +340,7 @@ class _drawer extends State<Drawer_findjobs> {
                   //color: Colors.blue,
                   textColor: Colors.white,
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => JobDetailPage()));
-
+                    // Navigator.push(context, MaterialPageRoute(builder: (context) => JobDetailPage()));
                   },
                 ),
               ),
