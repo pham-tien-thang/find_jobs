@@ -217,19 +217,13 @@ class _MyHomeScreen extends State<MyHomeScreen> {
                                    //VIEC LAM TRONG NUOC
                                    SingleChildScrollView(
                                      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                                     child: Column(
-                                       children: [
-                                        Newest_jobs(),
-                                       ],
+                                     child: Center(
+                                       child: Newest_jobs(),
                                      ),
                                    ),
                                    SingleChildScrollView(
                                      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                                     child: Column(
-                                       children: [
-                                         Newest_Candicate(),
-                                       ],
-                                     ),
+                                     child: Center(child: Newest_Candicate()),
                                    ),
                                  ],
                                ),
