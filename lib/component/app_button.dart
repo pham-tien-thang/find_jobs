@@ -49,7 +49,7 @@ class _AppButton extends StatelessWidget {
 
   Widget _buildBodyWidget() {
     if (isLoading) {
-      return SpinKitCubeGrid(color: Colors.white);
+      return SpinKitCubeGrid(color: Colors.white,size: 30,);
     } else {
       return Text(
         title,

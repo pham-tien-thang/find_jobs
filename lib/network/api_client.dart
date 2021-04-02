@@ -1,5 +1,6 @@
 
 import 'package:dio/dio.dart';
+import 'package:find_jobs/model/entity/apply_job_entity.dart';
 import 'package:find_jobs/model/entity/job_detail_entity.dart';
 import 'package:retrofit/http.dart';
 
@@ -11,4 +12,7 @@ abstract class ApiClient{
 
   @POST("/api/job-news/details")
   Future<JobDetailEntity> getJobDetail(@Body() Map<String, dynamic> data);
+
+  @POST("/api/job-applications/apply-job")
+  Future<ApplyJobEntity> applyJob(@Body() Map<String, dynamic> data);
 }

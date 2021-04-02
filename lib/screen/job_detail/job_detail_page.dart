@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:find_jobs/common/app_color.dart';
 import 'package:find_jobs/component/app_button.dart';
+import 'package:find_jobs/helper/Toast.dart';
 import 'package:find_jobs/item_app/Drawer_findjobs.dart';
 import 'package:find_jobs/layout_home/Header_home.dart';
 import 'package:find_jobs/model/entity/job_new_detail_entity.dart';
@@ -11,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class JobDetailPage extends StatefulWidget {
@@ -26,6 +30,7 @@ class JobDetailPage extends StatefulWidget {
 
 class _JobDetailPageState extends State<JobDetailPage> {
   JobDetailCubit _jobDetailCubit;
+  StreamSubscription _showMessageSubcription;
 
   @override
   void initState() {
@@ -33,11 +38,22 @@ class _JobDetailPageState extends State<JobDetailPage> {
     _jobDetailCubit = JobDetailCubit(jobRepository);
     super.initState();
     _jobDetailCubit.getJobDetail(widget.id);
+    _showMessageSubcription = _jobDetailCubit.showMessageController.listen((value) {
+      switch(value){
+        case ApplyJobToast.SUCCESS:
+          return showToast("Ứng tuyển thành công", context, Colors.blue, Icons.done);
+        case ApplyJobToast.FAILURE:
+          return showToast("Bạn đã ứng tuyển công việc này", context, Colors.red, Icons.close);
+        case ApplyJobToast.ERROR:
+          return showToast("Ứng tuyển thành công", context, Colors.amber, Icons.error);
+      }
+    });
   }
 
   @override
   void dispose() {
     _jobDetailCubit.close();
+    _showMessageSubcription.cancel();
     super.dispose();
   }
 
@@ -85,11 +101,24 @@ class _JobDetailPageState extends State<JobDetailPage> {
             SizedBox(
               height: 20,
             ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              child: AppGreenButton(
-                title: 'Đăng kí',
-              ),
+            BlocBuilder<JobDetailCubit,JobDetailState>(
+              cubit: _jobDetailCubit,
+              buildWhen: (previous, current) {
+                return previous.loadApply != current.loadApply;
+              },
+              builder: (context, state) {
+                final isLoading = state.loadApply == LoadStatus.LOADING;
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: AppGreenButton(
+                    title: 'Đăng kí',
+                    isLoading: isLoading,
+                    onPressed: (){
+                      _jobDetailCubit.applyJob(widget.id.toString());
+                    },
+                  ),
+                );
+              },
             ),
             SizedBox(
               height: 20,

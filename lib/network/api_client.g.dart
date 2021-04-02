@@ -35,4 +35,24 @@ class _ApiClient implements ApiClient {
     final value = JobDetailEntity.fromJson(_result.data);
     return value;
   }
+
+  @override
+  Future<ApplyJobEntity> applyJob(data) async {
+    ArgumentError.checkNotNull(data, 'data');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data ?? <String, dynamic>{});
+    final _result = await _dio.request<Map<String, dynamic>>(
+        '/api/job-applications/apply-job',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'POST',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = ApplyJobEntity.fromJson(_result.data);
+    return value;
+  }
 }
