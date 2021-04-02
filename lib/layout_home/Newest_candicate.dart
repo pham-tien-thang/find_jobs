@@ -2,6 +2,7 @@ import 'package:find_jobs/helper/Api_findjobs.dart';
 import 'package:find_jobs/screen/Detail_user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 
 // ignore: camel_case_types
@@ -179,8 +180,20 @@ print("chay build");
                 );
               }
               canCall = true;
-              return Center(child: CircularProgressIndicator(backgroundColor: Colors.green,
-              ));
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: Center(
+                      child: SpinKitCircle(
+                        color: Colors.green,
+                        size: 50,
+                      )
+                    ),
+                    height: 200,
+                  ),
+                ],
+              );
             }),
       ],
     );

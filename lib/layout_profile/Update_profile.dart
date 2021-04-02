@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'dart:async';
 import 'package:find_jobs/helper/Api_findjobs.dart';
+import 'package:find_jobs/helper/Preferences.dart';
 import 'package:find_jobs/helper/Toast.dart';
 import 'package:find_jobs/layout_profile/Profile_below.dart';
 import 'package:find_jobs/screen/Detail_user.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:http/http.dart';
 
 import 'package:http_parser/http_parser.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -69,6 +71,8 @@ class _Update_profile extends State<Update_profile> {
    List id_huyen=[];
    List id_xa=[];
    bool loading = true;
+   bool ready = true;
+   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
    call_tinh()async{
      setState(() {
        loading = true;
@@ -437,12 +441,106 @@ _xadropDownMenuItems = getxaDropDownMenuItems();
     //   print(_image.toString());
     // });
   }
+  String genderId(){
+    for (int i = 0; i < gender.length; i++) {
+      if (gender[i] == current_gender) {
+        return "$i";
+      }
+    }
+  }
+  String graduate(){
+    for (int i = 0; i < degree.length; i++) {
+      if (degree[i] == current_degree) {
+        int a = i+2;
+        return "$a";
+      }
+    }
+  }
+  String typeofwork_S(){
+    for (int i = 0; i < typeofwork.length; i++) {
+      if (typeofwork[i] == current_typeofwork) {
+        int a = i+1;
+        return "$a";
+      }
+    }
+  }
+  validate()async{
+    FocusScope.of(_scaffoldKey.currentContext)
+        .requestFocus(new FocusNode());
+    if (name_us.text.length < 2) {
+      showToast("Tên từ 2 - 50 ký tự", context, Colors.red, Icons.clear);
+    } else if (phone_us.text == double.nan||phone_us.text.length < 10||phone_us.text.contains("-")||phone_us.text.contains(".")) {
+      showToast("Số điện thoại không đúng", context, Colors.red, Icons.clear);
+    } else if (mail_us.text.length < 1||!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(mail_us.text)) {
+      showToast("Email không hợp lệ", context, Colors.red, Icons.clear);
+    } else if (salary_us.text.length < 1) {
+      showToast("Nhập mức lương", context, Colors.red, Icons.clear);
+    } else if ( exp_us.text.length < 1) {
+      showToast("Nhập số năm kinh nghiệm", context, Colors.red, Icons.clear);
+    }
+    else if (exp_us.text == double.nan||exp_us.text.contains("-")||exp_us.text.contains(".")) {
+      showToast("Số năm kinh nghiệm không đúng", context, Colors.red, Icons.clear);
+    }
+    else if (int.parse(exp_us.text) >100) {
+      showToast("Số năm kinh nghiệm tối đa 100", context, Colors.red, Icons.clear);
+    }
+    else {
+      print("chay vao else");
+      setState(() {
+        ready = false;
+      });
+      uploadImage(_image==null?null:_image.path);
+  }
+   }
+  Future<String> uploadImage(filename) async {
+    final fomat = new DateFormat('MM-dd-yyyy');
+    DateTime birth = fomat.parse(B_date.text);
+
+   // print(from.millisecondsSinceEpoch.toString());
+    var request = MultipartRequest('POST', Uri.parse('https://find-job-app.herokuapp.com/api/users/update'));
+    _image==null?null:request.files.add(await MultipartFile.fromPath('avatar',filename));
+    request.fields['userId'] = sharedPrefs.user_id;
+    request.fields['fullName'] = name_us.text;
+    request.fields['email'] = mail_us.text;
+    request.fields['phone'] = phone_us.text;
+    request.fields['genderId'] = genderId();
+    request.fields['birthdayInMilliseconds'] = (birth.millisecondsSinceEpoch).toString();
+    request.fields['addressSubdistrictId'] =id_xa_selec ;
+    request.fields['graduatedEducationId'] = graduate();
+    request.fields['typeOfWorkId'] = typeofwork_S();
+    request.fields['expectedSalaryInVnd'] = salary_us.text;
+    request.fields['yearsOfExperiences'] = exp_us.text;
+    request.fields['resumeSummary'] =  description_us.text;
+    request.fields['careerObjective'] = careerObjective.text;
+    var res = await request.send();
+    var rp;
+    await res.stream.transform(utf8.decoder).listen((value) {
+      print(value);
+      setState(() {
+        rp = jsonDecode(value);
+      });
+    });
+    if(rp['result']){
+      showToast("Vuốt xuống để cập nhật", context, Colors.greenAccent, Icons.arrow_downward);
+      Navigator.pushReplacement(context,
+          new MaterialPageRoute(builder: (context) => profile(my_acc: true,)));
+       print( res);
+    }
+    else if (!rp['result']){
+      showToast(rp['message'], context, Colors.red, Icons.cancel);
+      setState(() {
+        ready = true;
+      });
+    }
+
+    return res.reasonPhrase;
+  }
 
   @override
   Widget build(BuildContext context) {
     double mda = MediaQuery.of(context).size.width;
     return Scaffold(
-     // key: _scaffoldKey,
+     key: _scaffoldKey,
       appBar: AppBar(
         leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:() {
           FocusScopeNode currentFocus = FocusScope.of(context);
@@ -548,11 +646,11 @@ _xadropDownMenuItems = getxaDropDownMenuItems();
                                         fontSize: mda / 35,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  color: Colors.green,
+                                  color: ready?Colors.green:Colors.grey,
                                   textColor: Colors.white,
                                   onPressed: () {
-                                    showToast("chưa làm", context, Colors.red, Icons.android);
-                                   // call_huyen("06");
+                                    loading? showToast("Đang tải...", context, Colors.grey, Icons.cancel):(ready?validate()
+                                        : showToast("Đang tải...", context, Colors.grey, Icons.cancel));
                                   },
                                 ),
                                 Padding(
@@ -747,7 +845,7 @@ _xadropDownMenuItems = getxaDropDownMenuItems();
                                 TextField(
                                   controller: mail_us,
                                   maxLength: 50,
-                                  keyboardType: TextInputType.number,
+
                                   decoration: InputDecoration(
                                     border: new OutlineInputBorder(
                                         borderSide: new BorderSide(color: Colors.grey)),
@@ -1077,11 +1175,13 @@ _xadropDownMenuItems = getxaDropDownMenuItems();
                                 'Lưu',
                                 style: TextStyle(fontSize: mda / 35),
                               ),
-                              color: Colors.green,
+                              color: ready?Colors.green:Colors.grey,
                               textColor: Colors.white,
                               onPressed: () {
-showToast("chưa làm", context, Colors.red, Icons.android);
+                                loading? showToast("Đang tải...", context, Colors.grey, Icons.cancel):(ready?validate()
+                                    : showToast("Đang tải...", context, Colors.grey, Icons.cancel));
                               },
+
                             ),
                             VerticalDivider(),
                             FlatButton(
