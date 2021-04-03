@@ -3,6 +3,7 @@ import 'package:find_jobs/helper/Preferences.dart';
 import 'package:find_jobs/model/entity/apply_job_entity.dart';
 import 'package:find_jobs/model/entity/job_detail_entity.dart';
 import 'package:find_jobs/model/entity/job_new_detail_entity.dart';
+import 'package:find_jobs/model/enum/apply_job_toast.dart';
 import 'package:find_jobs/model/enum/load_status.dart';
 import 'package:find_jobs/model/param/apply_job_param.dart';
 import 'package:find_jobs/model/param/job_detail_param.dart';
@@ -12,21 +13,19 @@ import 'package:rxdart/rxdart.dart';
 
 part 'job_detail_state.dart';
 
-enum ApplyJobToast{
-  SUCCESS,
-  FAILURE,
-  ERROR,
-}
+
 class JobDetailCubit extends Cubit<JobDetailState> {
   JobRepository _jobRepository;
 
   JobDetailCubit(this._jobRepository) : super(JobDetailState());
 
-  final showMessageController = PublishSubject<ApplyJobToast>();
+  final trueToastController = PublishSubject<String>();
+  final falseToastController = PublishSubject<String>();
 
 @override
   Future<void> close() {
-  showMessageController.close();
+  trueToastController.close();
+  falseToastController.close();
     return super.close();
 
   }
@@ -56,14 +55,14 @@ class JobDetailCubit extends Cubit<JobDetailState> {
       ApplyJobEntity response = await _jobRepository.applyJob(param);
       if (response.result == true && response.message != "") {
         emit(state.copyWith(loadApply: LoadStatus.SUCCESS));
-        showMessageController.sink.add(ApplyJobToast.SUCCESS);
+        trueToastController.sink.add(response.message);
       }else{
         emit(state.copyWith(loadApply: LoadStatus.FAILURE));
-        showMessageController.sink.add(ApplyJobToast.FAILURE);
+        falseToastController.sink.add(response.message);
       }
     } catch (e) {
       emit(state.copyWith(loadApply: LoadStatus.FAILURE));
-      showMessageController.sink.add(ApplyJobToast.ERROR);
+      falseToastController.sink.add("Đăng kí thất bại");
     }
   }
 }

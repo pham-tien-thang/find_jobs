@@ -7,6 +7,7 @@ import 'package:find_jobs/item_app/Drawer_findjobs.dart';
 import 'package:find_jobs/layout_home/Header_home.dart';
 import 'package:find_jobs/model/entity/job_new_detail_entity.dart';
 import 'package:find_jobs/model/entity/required_job_skills.dart';
+import 'package:find_jobs/model/enum/apply_job_toast.dart';
 import 'package:find_jobs/model/enum/load_status.dart';
 import 'package:find_jobs/repositories/job_repository.dart';
 import 'package:find_jobs/screen/job_detail/job_detail_cubit.dart';
@@ -30,7 +31,8 @@ class JobDetailPage extends StatefulWidget {
 
 class _JobDetailPageState extends State<JobDetailPage> {
   JobDetailCubit _jobDetailCubit;
-  StreamSubscription _showMessageSubcription;
+  StreamSubscription _showTrueToast;
+  StreamSubscription _showFalseToast;
 
   @override
   void initState() {
@@ -38,22 +40,29 @@ class _JobDetailPageState extends State<JobDetailPage> {
     _jobDetailCubit = JobDetailCubit(jobRepository);
     super.initState();
     _jobDetailCubit.getJobDetail(widget.id);
-    _showMessageSubcription = _jobDetailCubit.showMessageController.listen((value) {
-      switch(value){
-        case ApplyJobToast.SUCCESS:
-          return showToast("Ứng tuyển thành công", context, Colors.blue, Icons.done);
-        case ApplyJobToast.FAILURE:
-          return showToast("Bạn đã ứng tuyển công việc này", context, Colors.red, Icons.close);
-        case ApplyJobToast.ERROR:
-          return showToast("Ứng tuyển thành công", context, Colors.amber, Icons.error);
-      }
+    _showTrueToast = _jobDetailCubit.trueToastController.listen((value) {
+      showToast(value, context, Colors.blue, Icons.done);
     });
+    _showFalseToast = _jobDetailCubit.falseToastController.listen((value) {
+      showToast(value, context, Colors.redAccent, Icons.close);
+    });
+    // _showMessageSubcription = _jobDetailCubit.showMessageController.listen((value) {
+    //   switch(value){
+    //     case ApplyJobToast.SUCCESS:
+    //       return showToast("Ứng tuyển thành công", context, Colors.blue, Icons.done);
+    //     case ApplyJobToast.FAILURE:
+    //       return showToast("Bạn đã ứng tuyển công việc này", context, Colors.red, Icons.close);
+    //     case ApplyJobToast.ERROR:
+    //       return showToast("Ứng tuyển thành công", context, Colors.amber, Icons.error);
+    //   }
+    // });
   }
 
   @override
   void dispose() {
     _jobDetailCubit.close();
-    _showMessageSubcription.cancel();
+    _showTrueToast.cancel();
+    _showFalseToast.cancel();
     super.dispose();
   }
 
