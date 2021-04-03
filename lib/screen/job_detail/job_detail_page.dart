@@ -120,6 +120,9 @@ class _JobDetailPageState extends State<JobDetailPage> {
                 return Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   child: AppGreenButton(
+                    borderRadius: 12,
+                    height: 40,
+                    width: double.infinity,
                     title: 'Đăng kí',
                     isLoading: isLoading,
                     onPressed: (){

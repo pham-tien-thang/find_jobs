@@ -9,6 +9,7 @@ import 'package:find_jobs/screen/LoginScreen.dart';
 import 'package:find_jobs/screen/NewScreen.dart';
 import 'package:find_jobs/screen/introduce_screen.dart';
 import 'package:find_jobs/screen/job_detail/job_detail_page.dart';
+import 'package:find_jobs/screen/my_apply_job/my_apply_jobs_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -340,7 +341,7 @@ class _drawer extends State<Drawer_findjobs> {
                   //color: Colors.blue,
                   textColor: Colors.white,
                   onPressed: () {
-                    // Navigator.push(context, MaterialPageRoute(builder: (context) => JobDetailPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyApplyJobsPage()));
                   },
                 ),
               ),
