@@ -12,12 +12,14 @@ import 'package:find_jobs/model/Option.dart';
 import 'package:find_jobs/screen/Change_password.dart';
 import 'package:find_jobs/screen/HomeScreen.dart';
 import 'package:find_jobs/screen/LoginScreen.dart';
+import 'package:find_jobs/screen/Recruitment.dart';
 import 'package:find_jobs/screen/Search_keywword.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -47,7 +49,7 @@ class _profile extends State<profile> {
       'userId': widget.my_acc?sharedPrefs.user_id.toString():widget.id,
     },);
 var res = await a.postMethod();
-
+    print(res);
     return res;
   }
   Future<void> _refresh() async {
@@ -122,11 +124,11 @@ var res = await a.postMethod();
           MaterialPageRoute(builder: (context) => LoginScreen()),
               (Route<dynamic> route) => false);
     }
-    // else if(choice == Option.find_jobs){
-    //   Navigator.push(
-    //       context, new MaterialPageRoute(builder: (context) => Job_Find_People_Page() ));
-    //
-    // }
+    else if(choice == Option.dang_tin){
+      Navigator.push(
+          context, new MaterialPageRoute(builder: (context) => Recruitment() ));
+
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -389,7 +391,10 @@ _detail = call_api_detail();
                   ),
                 ),
               )
-                  :Center(child: CircularProgressIndicator());
+                  :Center(child: SpinKitCircle(
+                color: Colors.green,
+                size: 50,
+              ));
             }
         ),
       ),

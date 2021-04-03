@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 //void main() => runApp(MyApp());
 
@@ -96,6 +97,7 @@ class _MyNewScreen extends State<MyNewScreen> {
           print("da add page"+i.toString()+"new md co"+_newmd.length.toString()+"cai" );
         }
       });}
+
   }
 
 
@@ -196,7 +198,12 @@ class _MyNewScreen extends State<MyNewScreen> {
                                     ? Container(
                                   padding: EdgeInsets.only(bottom: 10),
                                   alignment: Alignment.center,
-                                  child: CircularProgressIndicator(),
+                                  child:  Center(
+                                      child: SpinKitCircle(
+                                        color: Colors.green,
+                                        size: 50,
+                                      )
+                                  ),
                                 )
                                     : SizedBox(),
                               ),
