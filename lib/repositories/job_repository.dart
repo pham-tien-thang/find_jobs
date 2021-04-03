@@ -10,8 +10,12 @@ import 'package:find_jobs/network/api_client.dart';
 
 abstract class JobRepository{
  Future<JobDetailEntity> getJobDetail(JobDetailParam param);
+
  Future<ApplyJobEntity> applyJob(ApplyJobParam param);
+
  Future<MyApplyDone> getListMyApply();
+
+ Future<ApplyJobEntity> deleteMyApplyJob(String candidateUserId, String jobNewsId);
 
 }
 class JobRepositoryIplm extends JobRepository{
@@ -37,6 +41,11 @@ class JobRepositoryIplm extends JobRepository{
   Future<MyApplyDone> getListMyApply()async {
     String userID = SharedPrefs().user_id.toString();
     return await _apiClient.getListMyApply(userID);
+  }
+
+  @override
+  Future<ApplyJobEntity> deleteMyApplyJob(String candidateUserId, String jobNewsId) async {
+    return await _apiClient.deleteMyApplyJob(candidateUserId, jobNewsId);
   }
 
 }

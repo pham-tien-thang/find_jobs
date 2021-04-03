@@ -21,4 +21,7 @@ abstract class ApiClient{
 
   @POST("/api/job-applications/get-applied-jobs-of-one-candidate")
   Future<MyApplyDone> getListMyApply(@Field() String userId);
+
+  @POST("/api/job-applications/cancel-job-application-from-candidate")
+  Future<ApplyJobEntity> deleteMyApplyJob(@Field() String candidateUserId,@Field() String jobNewsId);
 }
