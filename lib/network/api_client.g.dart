@@ -55,4 +55,45 @@ class _ApiClient implements ApiClient {
     final value = ApplyJobEntity.fromJson(_result.data);
     return value;
   }
+
+  @override
+  Future<MyApplyDone> getListMyApply(userId) async {
+    ArgumentError.checkNotNull(userId, 'userId');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = {'userId': userId};
+    _data.removeWhere((k, v) => v == null);
+    final _result = await _dio.request<Map<String, dynamic>>(
+        '/api/job-applications/get-applied-jobs-of-one-candidate',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'POST',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = MyApplyDone.fromJson(_result.data);
+    return value;
+  }
+
+  @override
+  Future<ApplyJobEntity> deleteMyApplyJob(candidateUserId, jobNewsId) async {
+    ArgumentError.checkNotNull(candidateUserId, 'candidateUserId');
+    ArgumentError.checkNotNull(jobNewsId, 'jobNewsId');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = {'candidateUserId': candidateUserId, 'jobNewsId': jobNewsId};
+    _data.removeWhere((k, v) => v == null);
+    final _result = await _dio.request<Map<String, dynamic>>(
+        '/api/job-applications/cancel-job-application-from-candidate',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'POST',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = ApplyJobEntity.fromJson(_result.data);
+    return value;
+  }
 }

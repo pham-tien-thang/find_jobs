@@ -13,28 +13,36 @@ class _AppButton extends StatelessWidget {
   Color backgroundColor;
   Color inactiveColor;
   double height;
+  double width;
+  double borderRadius;
+  double textSize;
 
   _AppButton(
       {this.title = "",
       this.isLoading = false,
       this.onPressed,
-      this.height = 40});
+      this.height = 40,
+      this.width = double.infinity,
+      this.borderRadius = 12,
+      this.textSize = 12,
+      });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: height,
-      width: double.infinity,
+      width: width,
       child: ButtonTheme(
         minWidth: 0.0,
         height: 0.0,
         padding: EdgeInsets.all(0),
         child: Container(
-          height: 40,
+          height: height,
+          width: width,
           child: FlatButton(
             child: _buildBodyWidget(),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(borderRadius),
             ),
             onPressed: isEnable ? onPressed : null,
           ),
@@ -42,7 +50,7 @@ class _AppButton extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: isEnable ? backgroundColor : inactiveColor,
-        borderRadius: BorderRadius.all(Radius.circular(12)),
+        borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
       ),
     );
   }
@@ -54,7 +62,7 @@ class _AppButton extends StatelessWidget {
       return Text(
         title,
         style: TextStyle(
-          fontSize: 16,
+          fontSize: textSize,
           fontWeight: FontWeight.w600,
           color: textColor,
         ),
@@ -68,13 +76,68 @@ class AppGreenButton extends _AppButton {
     bool isLoading = false,
     bool isEnable = true,
     VoidCallback onPressed,
+    double height,
+    double width,
+    double borderRadius,
   }) {
     this.title = title;
     this.isLoading = isLoading;
     this.onPressed = onPressed;
     this.isEnable = isEnable;
+    this.height = height;
+    this.width = width;
+    this.borderRadius = borderRadius;
     //SetupUI
     textColor = Colors.white;
+    textSize = 16;
     backgroundColor = AppColor.main;
+  }
+}
+
+class AppSmallBlueButton extends _AppButton {
+  AppSmallBlueButton({
+    String title = '',
+    bool isLoading = false,
+    bool isEnable = true,
+    VoidCallback onPressed,
+    double height,
+    double width,
+    double borderRadius,
+  }) {
+    this.title = title;
+    this.isLoading = isLoading;
+    this.onPressed = onPressed;
+    this.isEnable = isEnable;
+    this.height = height;
+    this.width = width;
+    this.borderRadius = borderRadius;
+    //SetupUI
+    textColor = Colors.white;
+    textSize = 12;
+    backgroundColor = AppColor.main;
+  }
+}
+
+class AppSmallRedButton extends _AppButton {
+  AppSmallRedButton({
+    String title = '',
+    bool isLoading = false,
+    bool isEnable = true,
+    VoidCallback onPressed,
+    double height,
+    double width,
+    double borderRadius,
+  }) {
+    this.title = title;
+    this.isLoading = isLoading;
+    this.onPressed = onPressed;
+    this.isEnable = isEnable;
+    this.height = height;
+    this.width = width;
+    this.borderRadius = borderRadius;
+    //SetupUI
+    textColor = Colors.white;
+    textSize = 12;
+    backgroundColor = Colors.redAccent;
   }
 }
