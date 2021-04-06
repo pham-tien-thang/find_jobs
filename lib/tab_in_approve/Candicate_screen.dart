@@ -18,18 +18,119 @@ import 'List_jobs_candicate.dart';
 
 
 class Candicate_screen extends StatefulWidget {
-  Candicate_screen({Key key,this.list_candicate,this.indexjobs}) : super(key: key,);
-  List<Item_candicate> list_candicate;
+  Candicate_screen({Key key,this.indexjobs,this.id_jobs}) : super(key: key,);
+  //List<Item_candicate> list_candicate;
   int indexjobs;
+  String id_jobs;
   @override
   _Candicate_screen createState() => _Candicate_screen();
 }
 
 class _Candicate_screen extends State<Candicate_screen> {
 List display_candicate ;
+bool ready = true;
+call_xoa(String idjob,String idcandicate,int index)async{
+  setState(() {
+    ready = false;
+  });
+  print(ready.toString());
+  Api_findjobs api_delete_candicate = new Api_findjobs("/api/job-applications/delete-candidate-from-job-news", {
+    "jobNewsOwnerUserId":sharedPrefs.user_id,
+    "jobNewsId":idjob,
+    "candidateUserId":idcandicate
+  });
+  var res = await api_delete_candicate.postMethod();
+  print(res);
+  if(res['result']){
+    showToast("Xóa thành công", context, Colors.red, Icons.clear);
+    print(List_jobs.elementAt(widget.indexjobs).candicate.elementAt(index).name);
+ setState(() {
+   List_jobs.elementAt(widget.indexjobs).candicate.removeAt(index);
+   setState(() {
+     ready = true;
+   });
+ });
+    Navigator.of(context).pop();
+  }
+  else{
+    showToast("Xóa thất bại", context, Colors.red, Icons.clear);
+    setState(() {
+      ready = true;
+    });
+    Navigator.of(context).pop();
+  }
+  return res;
+}
+show_dialog_xoa(String idjob,String idcandicate,int index){
+  bool readydl = ready;
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context,setState){
+          return Dialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius:BorderRadius.circular(20.0),
+            ), //this right here
+            child: Container(
+              height: 200,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Text("Xóa ứng viên này ?",
+                        style:TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        RaisedButton(
+                          onPressed: () {
+                            setState(() {
+                              readydl = ready;
+                              print(readydl.toString());
+                            });
+                            ready?call_xoa(idjob,idcandicate,index):showToast("Đang xóa", context, Colors.yellow, Icons.cancel);
+                            setState(() {
+                              readydl = ready;
+                              print(readydl.toString());
+                            });
+                          },
+                          child: Text(
+                            readydl?"Đồng ý":"Đang xóa",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          color:readydl?Colors.deepOrange:Colors.grey,
+                        ),
+                        RaisedButton(
+                          onPressed: () {
+
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            "Hủy",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          color: Colors.grey,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+      });
+}
   @override
   void initState() {
-    display_candicate = widget.list_candicate;
+    display_candicate = List_jobs.elementAt(widget.indexjobs).candicate;
     // TODO: implement initState
     super.initState();
   }
@@ -51,7 +152,7 @@ List display_candicate ;
           },
 
         ),),
-        body:ListView.builder(
+        body:display_candicate.length>0?ListView.builder(
             controller: new ScrollController(),
             //  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             shrinkWrap: true,
@@ -105,8 +206,7 @@ List display_candicate ;
                             color: Colors.deepOrange,
                             textColor: Colors.white,
                             onPressed: () {
-
-                              print("bạn muốn xóa"+List_jobs.elementAt(widget.indexjobs).company_name+" tại người dùng"+List_jobs.elementAt(widget.indexjobs).candicate.elementAt(index).name);
+                              show_dialog_xoa(widget.id_jobs.toString(),display_candicate.elementAt(index).id.toString(),index);
                             },
                           ),
                         ),
@@ -116,7 +216,7 @@ List display_candicate ;
                   ),
                 ),
               );
-            }),
+            }):Container(),
         // This trailing comma makes auto-formatting nicer for build methods.
       ),
     );

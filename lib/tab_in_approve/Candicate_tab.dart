@@ -164,7 +164,8 @@ if(List_jobs.elementAt(index).candicate.length<1){
   showToast("Chưa có ai ứng tuyển", context, Colors.orangeAccent, Icons.check);
 }
 else{
-  Navigator.push(context, new MaterialPageRoute(builder: (context)=>Candicate_screen(list_candicate:List_jobs.elementAt(index).candicate,indexjobs: index,)));
+  Navigator.push(context, new MaterialPageRoute(builder: (context)=>Candicate_screen(indexjobs: index,
+  id_jobs: List_jobs.elementAt(index).jobNewsId.toString(),)));
 }
                             },
                           ),
