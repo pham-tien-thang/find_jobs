@@ -7,6 +7,7 @@ import 'package:find_jobs/helper/Toast.dart';
 import 'package:find_jobs/main.dart';
 import 'package:find_jobs/screen/HomeScreen.dart';
 import 'package:find_jobs/tab_in_approve/Approved.dart';
+import 'package:find_jobs/tab_in_approve/Candicate_tab.dart';
 import 'package:find_jobs/tab_in_approve/Not_approved.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -62,7 +63,7 @@ class _Recruitment extends State<Recruitment> with TickerProviderStateMixin {
           children: [
           Approved(),
             Not_approved(),
-            Text("data3"),
+            Candicate_tab()
           ],
         ),
       ),

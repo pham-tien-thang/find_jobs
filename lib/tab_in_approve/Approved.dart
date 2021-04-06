@@ -81,7 +81,7 @@ else{
                             Navigator.of(context).pop();
                           },
                           child: Text(
-                            "Xóa",
+                            "Hủy",
                             style: TextStyle(color: Colors.black),
                           ),
                           color: Colors.grey,
@@ -215,7 +215,7 @@ return ListView.builder(
                             size: 14,
                           ),
                           Text(
-                            'Hủy ',
+                            'Xóa ',
                             style: TextStyle(fontSize: 12),
                           ),
                         ],
