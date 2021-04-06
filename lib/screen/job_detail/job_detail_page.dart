@@ -113,23 +113,28 @@ class _JobDetailPageState extends State<JobDetailPage> {
             BlocBuilder<JobDetailCubit,JobDetailState>(
               cubit: _jobDetailCubit,
               buildWhen: (previous, current) {
-                return previous.loadApply != current.loadApply;
+                return previous.loadApply != current.loadApply || previous.loadStatus != current.loadStatus || previous.jobNewDetailEntity != current.jobNewDetailEntity;
               },
               builder: (context, state) {
                 final isLoading = state.loadApply == LoadStatus.LOADING;
-                return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  child: AppGreenButton(
-                    borderRadius: 12,
-                    height: 40,
-                    width: double.infinity,
-                    title: 'Đăng kí',
-                    isLoading: isLoading,
-                    onPressed: (){
-                      _jobDetailCubit.applyJob(widget.id.toString());
-                    },
-                  ),
-                );
+                if(state.jobNewDetailEntity?.status  == 'Đã phê duyệt'){
+                  return Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    child: AppGreenButton(
+                      borderRadius: 12,
+                      height: 40,
+                      width: double.infinity,
+                      title: 'Đăng kí',
+                      isLoading: isLoading,
+                      onPressed: (){
+                        _jobDetailCubit.applyJob(widget.id.toString());
+                      },
+                    ),
+                  );
+                }else{
+                  return Container();
+                }
+
               },
             ),
             SizedBox(
