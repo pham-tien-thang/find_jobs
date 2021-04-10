@@ -300,7 +300,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
             SizedBox(
               height: 10,
             ),
-            _buildFieldJobDetail('Số năm thành lập : ',
+            _buildFieldJobDetail('Yêu cầu kinh nghiệm : ',
                 jobNewDetailEntity.requiredNumberYearsOfExperiences.toString()),
             SizedBox(
               height: 10,
