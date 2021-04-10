@@ -3,8 +3,10 @@ import 'dart:ui';
 import 'package:find_jobs/helper/Api_findjobs.dart';
 import 'package:find_jobs/helper/Preferences.dart';
 import 'package:find_jobs/helper/Toast.dart';
+import 'package:find_jobs/item_app/Regulations.dart';
 import 'package:find_jobs/model_thang/Approved_model.dart';
 import 'package:find_jobs/model_thang/Unapproved_model.dart';
+import 'package:find_jobs/screen/Create_job.dart';
 import 'package:find_jobs/screen/job_detail/job_detail_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -117,6 +119,71 @@ class _Not_approved extends State<Not_approved> {
 //print("co return");
     return res;
   }
+  //============dialog noi quy
+  show_noiquy(double w, double h){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Regulations(w,h,context);
+        });
+  }
+  show_dialog_noiquy(double w, double h){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius:BorderRadius.circular(20.0),
+            ), //this right here
+            child: Container(
+              height: 200,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Text("Xem quy tắc duyệt tin ?",
+                        style:TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        RaisedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            show_noiquy(w, h);
+                          },
+                          child: Text(
+                            "Đồng ý",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          color:Colors.green,
+                        ),
+                        RaisedButton(
+                          onPressed: () {
+
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            "Hủy",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          color: Colors.grey,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
   Widget list_not_null(var data,double mda_h,double mda_w){
     print(model.length);
     return ListView.builder(
@@ -125,90 +192,120 @@ class _Not_approved extends State<Not_approved> {
         shrinkWrap: true,
         itemCount: model.length,
         itemBuilder: (BuildContext context, int index) {
-          return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 7, 0, 7),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Tên công ty: ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14
-                          ),
-                        ),
-                        Container(
-                          width: mda_w/1.75,
-                          child: Text(model.elementAt(index).company_name.toUpperCase(),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 3,
+          return GestureDetector(
+            onTap: (){
+             // show_noiquy(mda_w/1.75, mda_h/1);
+              show_dialog_noiquy(mda_w/1.75, mda_h/1);
+            },
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 7, 0, 7),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Tên công ty: ",
                             style: TextStyle(
+                                fontWeight: FontWeight.bold,
                                 fontSize: 14
-                            ),),
-                        ),
-                      ],
-                    ),
-                  ),
-                  //-----------------
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 7, 0, 7),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Lĩnh vực: ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14
+                            ),
                           ),
-                        ),
-                        Container(
-                          width:mda_w/1.75,
-                          child: Text(model.elementAt(index).title,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            style: TextStyle(
-                                fontSize: 14
-                            ),),
-                        ),
-                      ],
-                    ),
-                  ),
-                  //---------------------------
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                     Text("Chưa được duyệt"),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                        child: FlatButton(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(
-                                Icons.cancel,
-                                color: Colors.white,
-                                size: 14,
-                              ),
-                              Text(
-                                'Xóa ',
-                                style: TextStyle(fontSize: 12),
-                              ),
-                            ],
+                          Container(
+                            width: mda_w/1.75,
+                            child: Text(model.elementAt(index).company_name.toUpperCase(),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 3,
+                              style: TextStyle(
+                                  fontSize: 14
+                              ),),
                           ),
-                          color: Colors.red,
-                          textColor: Colors.white,
-                          onPressed: () {
-                            show_dialog(model.elementAt(index).id, index);
-                          },
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                    //-----------------
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 7, 0, 7),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Lĩnh vực: ",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14
+                            ),
+                          ),
+                          Container(
+                            width:mda_w/1.75,
+                            child: Text(model.elementAt(index).title,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: TextStyle(
+                                  fontSize: 14
+                              ),),
+                          ),
+                        ],
+                      ),
+                    ),
+                    //---------------------------
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                       Text("Chưa phê duyệt"),
+                        Row(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: FlatButton(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+
+                                    Text(
+                                      'Chi tiết ',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                                color: Colors.green,
+                                textColor: Colors.white,
+                                onPressed: () {
+                                  Navigator.push(context, new MaterialPageRoute(builder: (context)=>JobDetailPage(id: int.parse(model.elementAt(index).id.toString()))));
+                                },
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: FlatButton(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(
+                                      Icons.cancel,
+                                      color: Colors.white,
+                                      size: 14,
+                                    ),
+                                    Text(
+                                      'Xóa ',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                                color: Colors.red,
+                                textColor: Colors.white,
+                                onPressed: () {
+                                  show_dialog(model.elementAt(index).id, index);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -226,11 +323,16 @@ class _Not_approved extends State<Not_approved> {
                   children: [
                     Text("Không có tin chờ phê duyệt",style:
                     TextStyle(fontSize: 16),),
-                    Text("Đăng tin mới",style:
-                    TextStyle(fontSize: 16,
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                    )
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, new MaterialPageRoute(builder: (context)=>Create_job()));
+                      },
+                      child: Text("Đăng tin mới",style:
+                      TextStyle(fontSize: 16,
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      )
+                      ),
                     ),
                   ],
                 )
