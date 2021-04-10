@@ -227,7 +227,7 @@ class _drawer extends State<Drawer_findjobs> {
                               color: Colors.grey,
                             ),
                             Text(
-                              ' Mobile developer (Android/IOS)',
+                              ' Mobile developer (Android/IOS...)',
                               style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.green,

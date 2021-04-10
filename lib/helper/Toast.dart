@@ -29,7 +29,7 @@ void showToast(String text, BuildContext context, Color c, IconData i) {
           width: 10.0,
         ),
         Container(
-          // width: MediaQuery.of(context).size.width/1.85,
+           width: MediaQuery.of(context).size.width/1.85,
             child: Center(
               child: Text(text,
                 overflow: TextOverflow.ellipsis,
