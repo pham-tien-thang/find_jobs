@@ -14,6 +14,7 @@ import 'package:find_jobs/screen/HomeScreen.dart';
 import 'package:find_jobs/screen/LoginScreen.dart';
 import 'package:find_jobs/screen/Recruitment.dart';
 import 'package:find_jobs/screen/Search_keywword.dart';
+import 'package:find_jobs/screen/my_apply_job/my_apply_jobs_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -128,6 +129,8 @@ var res = await a.postMethod();
       Navigator.push(
           context, new MaterialPageRoute(builder: (context) => Recruitment() ));
 
+    }else{
+      Navigator.push(context, MaterialPageRoute(builder: (context) => MyApplyJobsPage()));
     }
   }
   @override

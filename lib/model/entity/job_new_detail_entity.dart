@@ -13,7 +13,7 @@ class JobNewDetailEntity{
   @JsonKey()
   String ownerName;
 
-  @JsonKey(name: 'statusName')
+  @JsonKey(name: "statusName")
   String status;
 
   @JsonKey()
