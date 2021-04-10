@@ -7,6 +7,7 @@ import 'package:find_jobs/screen/Detail_user.dart';
 import 'package:find_jobs/screen/HomeScreen.dart';
 import 'package:find_jobs/screen/LoginScreen.dart';
 import 'package:find_jobs/screen/NewScreen.dart';
+import 'package:find_jobs/screen/Seach_fillter.dart';
 import 'package:find_jobs/screen/introduce_screen.dart';
 import 'package:find_jobs/screen/job_detail/job_detail_page.dart';
 import 'package:find_jobs/screen/my_apply_job/my_apply_jobs_page.dart';
@@ -239,6 +240,8 @@ class _drawer extends State<Drawer_findjobs> {
                       //color: Colors.blue,
                       textColor: Colors.white,
                       onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Search_jobs(type: 1,)));
 
                       },
                     ),
@@ -260,7 +263,7 @@ class _drawer extends State<Drawer_findjobs> {
                               color: Colors.grey,
                             ),
                             Text(
-                              ' Game developer (C#,C++,Java...)',
+                              ' Game developer (C#,C++...)',
                               style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.green,
@@ -273,6 +276,7 @@ class _drawer extends State<Drawer_findjobs> {
                       textColor: Colors.white,
                       onPressed: () {
                         Navigator.of(context).pop();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Search_jobs(type: 2,)));
 
                       },
                     ),
@@ -307,6 +311,7 @@ class _drawer extends State<Drawer_findjobs> {
                       textColor: Colors.white,
                       onPressed: () {
                         Navigator.of(context).pop();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Search_jobs(type: 3,)));
 
                       },
                     ),
