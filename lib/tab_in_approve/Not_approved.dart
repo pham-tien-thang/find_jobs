@@ -272,6 +272,7 @@ class _Not_approved extends State<Not_approved> {
                                 color: Colors.green,
                                 textColor: Colors.white,
                                 onPressed: () {
+                                  print(model.elementAt(index).id.toString()+"job");
                                   Navigator.push(context, new MaterialPageRoute(builder: (context)=>JobDetailPage(id: int.parse(model.elementAt(index).id.toString()))));
                                 },
                               ),
