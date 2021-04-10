@@ -59,7 +59,7 @@ call_change() async{
   );
   var res = await login.postMethod();
   if(!res['result']){
-    showToast("Sai mật khẩu cũaaaaaaaaaaaaaaaaaaaaaa", context, Colors.red, Icons.cancel);
+    showToast("Sai mật khẩu cũ", context, Colors.red, Icons.cancel);
     setState(() {
       rd = true;
     });
@@ -103,6 +103,7 @@ vaidate(){
     return Scaffold(
       appBar: AppBar(
         title: Text("Đổi mật khẩu"),
+        backgroundColor: Colors.green,
         leading: IconButton(icon: Icon(Icons.arrow_back),
         onPressed: (){
           Navigator.of(context).pop();
