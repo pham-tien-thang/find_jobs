@@ -59,13 +59,13 @@ call_change() async{
   );
   var res = await login.postMethod();
   if(!res['result']){
-    showToast(res['message'], context, Colors.greenAccent, Icons.check);
+    showToast("Sai mật khẩu cũaaaaaaaaaaaaaaaaaaaaaa", context, Colors.red, Icons.cancel);
     setState(() {
       rd = true;
     });
   }
   else if(res['result']){
-    showToast(res['message'], context, Colors.red, Icons.cancel);
+    showToast("Hoàn tất", context, Colors.green, Icons.check);
     setState(() {
       rd = true;
     });
@@ -287,7 +287,7 @@ vaidate(){
                         height: 50,
                         child: FlatButton(
                           child: Text(
-                            rd ?'Đăng nhập':'Đang đăng nhập...',
+                            rd ?'Thay đổi':'Đang thay đổi...',
                             style: TextStyle(fontSize: mda / 25),
                           ),
                           color: rd?Colors.green.shade700:Colors.grey,
