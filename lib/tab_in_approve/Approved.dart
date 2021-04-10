@@ -4,6 +4,7 @@ import 'package:find_jobs/helper/Api_findjobs.dart';
 import 'package:find_jobs/helper/Preferences.dart';
 import 'package:find_jobs/helper/Toast.dart';
 import 'package:find_jobs/model_thang/Approved_model.dart';
+import 'package:find_jobs/screen/Create_job.dart';
 import 'package:find_jobs/screen/job_detail/job_detail_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -247,11 +248,16 @@ return ListView.builder(
                   children: [
                     Text("Bạn chưa có tin tuyển dụng nào",style:
                       TextStyle(fontSize: 16),),
-                    Text("Đăng tin mới",style:
-                    TextStyle(fontSize: 16,
-                    color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                    )
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, new MaterialPageRoute(builder: (context)=>Create_job()));
+                      },
+                      child: Text("Đăng tin mới",style:
+                      TextStyle(fontSize: 16,
+                      color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      )
+                      ),
                     ),
                   ],
                 )

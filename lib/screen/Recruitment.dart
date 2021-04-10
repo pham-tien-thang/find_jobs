@@ -5,6 +5,7 @@ import 'package:find_jobs/helper/Api_findjobs.dart';
 import 'package:find_jobs/helper/Preferences.dart';
 import 'package:find_jobs/helper/Toast.dart';
 import 'package:find_jobs/main.dart';
+import 'package:find_jobs/screen/Create_job.dart';
 import 'package:find_jobs/screen/HomeScreen.dart';
 import 'package:find_jobs/tab_in_approve/Approved.dart';
 import 'package:find_jobs/tab_in_approve/Candicate_tab.dart';
@@ -43,6 +44,14 @@ class _Recruitment extends State<Recruitment> with TickerProviderStateMixin {
       child: Scaffold(
         backgroundColor: Colors.grey.shade300,
         appBar: AppBar(
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.post_add,size: 35,color: Colors.white,),
+              onPressed: () {
+                Navigator.push(context, new MaterialPageRoute(builder: (context)=>Create_job()));
+              },
+            )
+          ],
           backgroundColor: Colors.green,
           title: Text("Tuyển dụng"),
           bottom:  TabBar(

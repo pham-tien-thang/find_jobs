@@ -6,6 +6,7 @@ import 'package:find_jobs/helper/Toast.dart';
 import 'package:find_jobs/item_app/Regulations.dart';
 import 'package:find_jobs/model_thang/Approved_model.dart';
 import 'package:find_jobs/model_thang/Unapproved_model.dart';
+import 'package:find_jobs/screen/Create_job.dart';
 import 'package:find_jobs/screen/job_detail/job_detail_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -252,30 +253,54 @@ class _Not_approved extends State<Not_approved> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                       Text("Chưa được duyệt"),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                          child: FlatButton(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Icon(
-                                  Icons.cancel,
-                                  color: Colors.white,
-                                  size: 14,
+                       Text("Chưa phê duyệt"),
+                        Row(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: FlatButton(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+
+                                    Text(
+                                      'Chi tiết ',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  'Xóa ',
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                              ],
+                                color: Colors.green,
+                                textColor: Colors.white,
+                                onPressed: () {
+                                  Navigator.push(context, new MaterialPageRoute(builder: (context)=>JobDetailPage(id: int.parse(model.elementAt(index).id.toString()))));
+                                },
+                              ),
                             ),
-                            color: Colors.red,
-                            textColor: Colors.white,
-                            onPressed: () {
-                              show_dialog(model.elementAt(index).id, index);
-                            },
-                          ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: FlatButton(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(
+                                      Icons.cancel,
+                                      color: Colors.white,
+                                      size: 14,
+                                    ),
+                                    Text(
+                                      'Xóa ',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                                color: Colors.red,
+                                textColor: Colors.white,
+                                onPressed: () {
+                                  show_dialog(model.elementAt(index).id, index);
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -298,11 +323,16 @@ class _Not_approved extends State<Not_approved> {
                   children: [
                     Text("Không có tin chờ phê duyệt",style:
                     TextStyle(fontSize: 16),),
-                    Text("Đăng tin mới",style:
-                    TextStyle(fontSize: 16,
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                    )
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, new MaterialPageRoute(builder: (context)=>Create_job()));
+                      },
+                      child: Text("Đăng tin mới",style:
+                      TextStyle(fontSize: 16,
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      )
+                      ),
                     ),
                   ],
                 )
