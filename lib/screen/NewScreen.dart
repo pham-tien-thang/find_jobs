@@ -114,14 +114,12 @@ class _MyNewScreen extends State<MyNewScreen> {
       appBar: scr?
       AppBar(
         title: Text("Tin tức"),
-        actions: <Widget>[
-          // IconButton(
-          //   icon: Icon(Icons.search),
-          //   onPressed: () {
-          //     // showSearch(context: context, delegate: seach_bar());
-          //   },
-          // )
-        ],
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: (){
+            Navigator.of(context).pop();
+          },
+        ),
       )
           :PreferredSize(
         preferredSize: Size(double.infinity, MediaQuery.of(context).size.width/4),
