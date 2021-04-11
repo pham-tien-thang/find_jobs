@@ -32,6 +32,9 @@ class JobNewDetailEntity{
   int salaryInVnd;
 
   @JsonKey()
+  int timeCreatedNewsMillis;
+
+  @JsonKey()
   String jobDescription;
 
   @JsonKey()
@@ -85,6 +88,7 @@ class JobNewDetailEntity{
       this.jobTitleName,
       this.companySizeByNumberEmployees,
       this.companyWebsite,
+      this.timeCreatedNewsMillis,
       this.companyEmail,
       this.companyPhoneNumber,
       this.requiredJobSkills});
