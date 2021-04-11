@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class JobDetailPage extends StatefulWidget {
@@ -241,7 +242,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
             Container(
               width: 100,
               height: 100,
-              child: Image.network(jobNewDetailEntity?.avatarUrl) ??
+              child:jobNewDetailEntity?.avatarUrl !=null ? Image.network(jobNewDetailEntity?.avatarUrl) :
                   Image.asset("assets/user.png"),
             ),
             SizedBox(
@@ -292,6 +293,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
             ),
             _buildColumnField(
                 'Mô tả công việc: ', jobNewDetailEntity?.jobDescription),
+
             SizedBox(
               height: 10,
             ),
@@ -325,6 +327,11 @@ class _JobDetailPageState extends State<JobDetailPage> {
             SizedBox(
               height: 10,
             ),
+            _buildFieldJobDetail(
+                'Thời gian đăng tin: ', _convertDateTime(jobNewDetailEntity?.timeCreatedNewsMillis)),
+            SizedBox(
+              height: 10,
+            ),
             _buildListJobSkills(
                 'Kỹ năng yêu cầu : ', jobNewDetailEntity?.requiredJobSkills),
             SizedBox(
@@ -334,6 +341,12 @@ class _JobDetailPageState extends State<JobDetailPage> {
         ),
       ),
     );
+  }
+
+  String _convertDateTime(int time){
+    var date = new DateTime.fromMicrosecondsSinceEpoch(time);
+    String formattedDate = DateFormat('dd-MM-yyyy').format(date);
+    return formattedDate;
   }
 
   _buildColumnField(String title, String content) {
