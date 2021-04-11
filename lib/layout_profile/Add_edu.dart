@@ -117,7 +117,7 @@ class _Add_edu extends State<Add_edu> {
       showToast("Vui lòng chọn ngày", context, Colors.red, Icons.cancel);
     }
     else  if(
-    from.millisecondsSinceEpoch>to.millisecondsSinceEpoch
+    from.millisecondsSinceEpoch>=to.millisecondsSinceEpoch
     ){
       showToast("Thời gian không hợp lệ", context, Colors.red, Icons.cancel);
       setState(() {

@@ -12,6 +12,7 @@ class _headerState extends State<header> {
   Widget build(context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
 
         Image.asset(

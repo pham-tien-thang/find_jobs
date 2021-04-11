@@ -369,7 +369,7 @@ else if(company_phone.text.length<10){
       setState(() {
         ready = true;
       });
-      showToast("Đăng tin thất bại", context, Colors.red, Icons.clear);
+      showToast("Chỉ được đăng tối đa 5 tin", context, Colors.yellow.shade700, Icons.warning);
     }
     else if(res_create['result']){
 call_edit(res_create['jobNewsId'].toString());

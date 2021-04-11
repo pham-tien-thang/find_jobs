@@ -29,7 +29,7 @@ class Candicate_screen extends StatefulWidget {
 class _Candicate_screen extends State<Candicate_screen> {
 List display_candicate ;
 bool ready = true;
-call_xoa(String idjob,String idcandicate,int index)async{
+call_xoa(String idjob,String idcandicate,int index,BuildContext ct)async{
   setState(() {
     ready = false;
   });
@@ -50,7 +50,7 @@ call_xoa(String idjob,String idcandicate,int index)async{
      ready = true;
    });
  });
-    Navigator.of(context).pop();
+    Navigator.of(ct).pop();
   }
   else{
     showToast("Xóa thất bại", context, Colors.red, Icons.clear);
@@ -66,7 +66,7 @@ show_dialog_xoa(String idjob,String idcandicate,int index){
   showDialog(
       context: context,
       builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context,setState){
+        return StatefulBuilder(builder: (contextdl,setState){
           return Dialog(
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
@@ -95,7 +95,7 @@ show_dialog_xoa(String idjob,String idcandicate,int index){
                               readydl = ready;
                               print(readydl.toString());
                             });
-                            ready?call_xoa(idjob,idcandicate,index):showToast("Đang xóa", context, Colors.yellow, Icons.cancel);
+                            ready?call_xoa(idjob,idcandicate,index,contextdl):showToast("Đang xóa", context, Colors.yellow, Icons.cancel);
                             setState(() {
                               readydl = ready;
                               print(readydl.toString());

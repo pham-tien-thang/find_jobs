@@ -70,7 +70,7 @@ class _Edit_exp extends State<Edit_exp> {
       showToast("Vui lòng chọn ngày", context, Colors.red, Icons.cancel);
     }
     else  if(
-    from.millisecondsSinceEpoch>to.millisecondsSinceEpoch
+    from.millisecondsSinceEpoch>=to.millisecondsSinceEpoch
     ){
       showToast("Thời gian không hợp lệ", context, Colors.red, Icons.cancel);
       setState(() {

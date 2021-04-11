@@ -439,6 +439,7 @@ _all = call_all();
         itemBuilder: (BuildContext context, int index) {
           return FlatButton(
             onPressed: () {
+              Navigator.push(context, new MaterialPageRoute(builder: (context)=>JobDetailPage(id: search?list_search.elementAt(index).id:list_all.elementAt(index).id)));
             },
             child: Flex(
               direction: Axis.horizontal,
