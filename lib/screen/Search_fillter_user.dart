@@ -12,7 +12,9 @@ import 'package:find_jobs/model_thang/Jobsnew_candicate.dart';
 import 'package:find_jobs/model_thang/Saraly_model.dart';
 import 'package:find_jobs/model_thang/Skill_jobs.dart';
 import 'package:find_jobs/model_thang/Unapproved_model.dart';
+import 'package:find_jobs/model_thang/User_fillter.dart';
 import 'package:find_jobs/model_thang/job_new_model.dart';
+import 'package:find_jobs/screen/Detail_user.dart';
 import 'package:find_jobs/screen/job_detail/job_detail_page.dart';
 import 'package:find_jobs/tab_in_approve/Candicate_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,36 +26,34 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 
-class Search_jobs extends StatefulWidget {
-  Search_jobs({Key key,this.type }) : super(key: key);
-  int type;
+class Search_fillter_user extends StatefulWidget {
+  Search_fillter_user({Key key,}) : super(key: key);
+
 
   @override
-  _Search_jobs createState() => _Search_jobs();
+  _Search_fillter_user createState() => _Search_fillter_user();
 }
 
-class _Search_jobs extends State<Search_jobs> {
+class _Search_fillter_user extends State<Search_fillter_user> {
   List<DropdownMenuItem<String>> _AddressdropDownMenuItems ;
-  List<DropdownMenuItem<String>> _positiondropDownMenuItems ;
-  List<DropdownMenuItem<String>> _timedropDownMenuItems ;
+  List<DropdownMenuItem<String>> _EducationdropDownMenuItems ;
+  List<DropdownMenuItem<String>> _SkilldropDownMenuItems ;
   List<DropdownMenuItem<String>> _saralydropDownMenuItems ;
   String curren_address;
-  String curren_position;
-  String curren_time;
+  String curren_skill;
+  String curren_education;
   String curren_saraly;
   Future _all;
   bool search = false;
-  List<Job_mew_model> list_all=[];
-  List<Job_mew_model> list_search=[];
-  List<Job_mew_model> list_hienthi=[];
+  List<User_fillter> list_all=[];
+  List<User_fillter> list_search=[];
   List address = [
   ];
-  List position = [
+  List skill = [
     "Tất cả",
-    "Thực tập",
-    "Mới đi làm",
-    "Nhân viên",
-    "Quản lý"
+    "Lập trình di động",
+    "Lập trình game",
+    "Lập trình Web"
   ];
   Saraly_model curren_saraly_model;
   List<Saraly_model> list_luong=[
@@ -70,11 +70,11 @@ class _Search_jobs extends State<Search_jobs> {
     "10-20 triệu",
     "Trên 20 triệu"
   ];
-  List type_of_w = [
+  List education = [
     "Tất cả",
-    "Full-time",
-    "Part-time",
-    "Freelance",
+    "Trên đại học",
+    "Đại học",
+    "Cao đẳng",
   ];
 
   List<DropdownMenuItem<String>> getaddressDropDownMenuItems() {
@@ -84,16 +84,16 @@ class _Search_jobs extends State<Search_jobs> {
     }
     return items;
   }
-  List<DropdownMenuItem<String>> getpositionDropDownMenuItems() {
+  List<DropdownMenuItem<String>> geteducationDropDownMenuItems() {
     List<DropdownMenuItem<String>> items = new List();
-    for (String de in position) {
+    for (String de in education) {
       items.add(drop(de));
     }
     return items;
   }
-  List<DropdownMenuItem<String>> gettimeDropDownMenuItems() {
+  List<DropdownMenuItem<String>> getskillDropDownMenuItems() {
     List<DropdownMenuItem<String>> items = new List();
-    for (String de in type_of_w) {
+    for (String de in skill) {
       items.add(drop(de));
     }
     return items;
@@ -117,98 +117,73 @@ class _Search_jobs extends State<Search_jobs> {
           ),
         ));
   }
-String f(){
-  if(widget.type==1){
-    return "Lập trình di động";
-  }
-  else if(widget.type==2){
-    return "Lập trình game";
-  }
-  else if(widget.type==3){
-    return "Lập trình Web";
-  }
-}
-  String type(){
-   if(widget.type==1){
-     return "Mobile";
-   }
-   else if(widget.type==2){
-     return "Game";
-   }
-   else if(widget.type==3){
-     return "Web";
-   }
- }
- call_all()async{
-    Api_findjobs getall = new Api_findjobs("/api/job-news/approved-job-news", {
+
+  call_all()async{
+    Api_findjobs getall = new Api_findjobs("/api/users", {
       "":""
     });
     var res_tinh = await call_tinh();
-if(res_tinh['result']){
-var res_all = await getall.getMethod();
+    if(res_tinh['result']){
+      var res_all = await getall.getMethod();
 if(res_all['result']){
-  //check null
- if(res_all['jobNewsArr'].length>0){
-   //add model
-   print("chạy addmodel");
+  if(res_all['users'].length>0){
+    list_all.clear();
+    for(int i = 0 ; i < res_all['users'].length;i++){
+      List<Skill_jobs> list_sk = [];
+    //  print(res_all['users'][i]['addressStateProvince']);
+      //====có skill
+     if(res_all['users'][i]['skills'].length>0){
 
- list_all.clear();
-   for( int i = 0 ;i<res_all['jobNewsArr'].length;i++){
-   List <Skill_jobs> list_skill=[];
-//check skill
-   if(res_all['jobNewsArr'][i]['requiredSkills'].length>0){
-     list_skill.clear();
-     //add_skill
-    for(int c = 0 ;c<res_all['jobNewsArr'][i]['requiredSkills'].length;c++){
-
-      if(res_all['jobNewsArr'][i]['requiredSkills'][c]['skillName'].toString().contains(f())){
-        Skill_jobs s = new Skill_jobs(name: res_all['jobNewsArr'][i]['requiredSkills'][c]['skillName']);
-        list_skill.add(s);
-        print(list_skill.length.toString()+"length skill");
-      }
-
+       list_sk.clear();
+       for(int c=0; c < res_all['users'][i]['skills'].length;c++){
+         Skill_jobs j  = new Skill_jobs(name: res_all['users'][i]['skills'][c]['skillName']);
+         list_sk.add(j);
+       }
+       print("co skill");
+     }
+     //===k co skill
+     else{
+       list_sk.clear();
+       print(" k co skill");
+     }
+     User_fillter u = new User_fillter(res_all['users'][i]['fullName'],
+         res_all['users'][i]['avatarUrl'].toString(),
+         res_all['users'][i]['id'] as int,
+         res_all['users'][i]['gender'].toString(),
+         res_all['users'][i]['expectedSalaryInVnd'].toString(),
+         res_all['users'][i]['addressStateProvince'].toString(),
+         res_all['users'][i]['levelOfEducationName'].toString(),
+         res_all['users'][i]['birthdayInMilliseconds'],
+         list_sk);
+     list_all.add(u);
+     print(list_all.length.toString()+"người");
     }
-     print("co skill");
-   }
-   else{
-     print("null skill");
-   }
-
-if(list_skill.length>0){
-
-  Job_mew_model j = new Job_mew_model(res_all['jobNewsArr'][i]['companyName'],
-    res_all['jobNewsArr'][i]['jobShortDescription'],
-    res_all['jobNewsArr'][i]['jobNewsId'] as int,
-    res_all['jobNewsArr'][i]['stateProvinceName'],
-    res_all['jobNewsArr'][i]['jobTitleName'],
-  res_all['jobNewsArr'][i]['salaryInVnd'].toString(),
-    res_all['jobNewsArr'][i]['typeOfWorkName'],
-    list_skill,
-  );
-  list_all.add(j);
-  print(list_all.length.toString()+"cong viec"+f());
-}
-else {
-  print("không phai"+f());
-}
-
-   }
-   print(res_all);
-   return res_all;
- }
- print("null");
- return 1;
+    showToast(" Đã tải người dùng", context, Colors.green, Icons.check);
+    return 1;
+  }
+  else{
+    showToast("Không có người dùng", context, Colors.red, Icons.cancel);
+    return 1;
+  }
 }
 else{
   showToast("Lấy danh sách thất bại", context, Colors.red, Icons.cancel);
   return 1;
 }
-}
-else {
-  showToast("Lấy danh sách tỉnh thất bại", context, Colors.red, Icons.cancel);
-  return 1;
-}
- }
+    }
+    else {
+      showToast("Lấy danh sách tỉnh thất bại", context, Colors.red, Icons.cancel);
+      return 1;
+    }
+  }
+  String tuoi(int milis){
+    DateTime now = new DateTime.now();
+    final DateFormat formatter = DateFormat('yyyy');
+    var dateConvert = new DateTime.fromMillisecondsSinceEpoch(
+        milis );
+    String t = formatter.format(dateConvert);
+    return t;
+  }
   call_tinh()async{
     setState(() {
       address.clear();
@@ -228,82 +203,91 @@ else {
     return res;
   }
   void changedaddressDropDownItem(String selectedCity) {
-setState(() {
-curren_address = selectedCity;
-});
-call_search();
-  }
-  void changedpositionDropDownItem(String selectedCity) {
     setState(() {
-curren_position = selectedCity;
+      curren_address = selectedCity;
     });
-    call_search();
+   call_search();
+  }
+  void changedskillDropDownItem(String selectedCity) {
+    setState(() {
+      curren_skill = selectedCity;
+    });
+   call_search();
   }
   void changedsaralyDropDownItem(String selectedCity) {
     setState(() {
-curren_saraly = selectedCity;
+      curren_saraly = selectedCity;
     });
-        for(int  i = 0 ; i < luong.length;i++){
-if(curren_saraly==luong[i]){
-  setState(() {
-    curren_saraly_model = list_luong[i];
-    print(curren_saraly_model.min.toString()+"đến"+curren_saraly_model.max.toString());
-  });
-  call_search();
-}
+    for(int  i = 0 ; i < luong.length;i++){
+      if(curren_saraly==luong[i]){
+        setState(() {
+          curren_saraly_model = list_luong[i];
+          print(curren_saraly_model.min.toString()+"đến"+curren_saraly_model.max.toString());
+        });
+       call_search();
+      }
     }
   }
-  void changedtimeDropDownItem(String selectedCity) {
+  void changededucationDropDownItem(String selectedCity) {
     setState(() {
-curren_time  = selectedCity;
+      curren_education  = selectedCity;
     });
-    call_search();
+   call_search();
   }
   call_search(){
     setState(() {
       search = true;
       list_search.clear();
     });
-    for(int i = 0 ; i< list_all.length;i++){
-      if(
-      (curren_address=="Tất cả địa chỉ"?true:list_all.elementAt(i).address == curren_address)&&
-          (curren_position=="Tất cả"?true:list_all.elementAt(i).position == curren_position)&&
-          ( curren_time=="Tất cả"?true:list_all.elementAt(i).time == curren_time)&&
-   (int.parse(list_all.elementAt(i).saraly)<=curren_saraly_model.max&&int.parse(list_all.elementAt(i).saraly)>=curren_saraly_model.min)
-      ){
-        list_search.add(list_all[i]);
-      }
-      else{
-        print(list_all.elementAt(i).time);
-      }
-    }
-    print("có"+list_search.length.toString()+"kết quả");
+    Skill_jobs c = new Skill_jobs(name: curren_skill);
+   for(int i = 0 ; i < list_all.length;i++){
+  if(
+
+  ( curren_address =="Tất cả địa chỉ"?true:list_all.elementAt(i).address.toString() == curren_address.toString())
+      && (curren_education=="Tất cả"?true:list_all.elementAt(i).level.toString() == curren_education)
+      &&curren_saraly =="Tất cả"?true:
+  (list_all.elementAt(i).salary.toString()=="null"
+      ?false
+      :(int.parse(list_all.elementAt(i).salary.toString())<=curren_saraly_model.max&&
+      int.parse(list_all.elementAt(i).salary.toString())>=curren_saraly_model.min))
+    &&(curren_skill =="Tất cả"?true:list_all.elementAt(i).skill.any((e) => e.name == c.name))
+  ){
+    list_search.add(list_all[i]);
+    print(list_search.length.toString());
+
+
+  }
+  else{
+    print(" k ok");
+  }
+   }
+
   }
   settext(){
     setState(() {
       curren_saraly_model= list_luong[0];
       curren_saraly = luong[0];
-      curren_time = type_of_w[0];
-      curren_position = position[0];
+      curren_skill = skill[0];
+      curren_education = education[0];
     });
 
     _saralydropDownMenuItems = getsaralyDropDownMenuItems();
-    _timedropDownMenuItems = gettimeDropDownMenuItems();
-    _positiondropDownMenuItems = getpositionDropDownMenuItems();
+    _EducationdropDownMenuItems = geteducationDropDownMenuItems();
+    _SkilldropDownMenuItems = getskillDropDownMenuItems();
   }
   String _saraly(String l){
-  if(l.length>6){
-    String a = l.substring(0,l.length-6);
-    return a + " triệu VNĐ";
+    if(l.length>6){
+      String a = l.substring(0,l.length-6);
+      return a + " triệu VNĐ";
+    }
+    else {
+      return l;
+    }
   }
-  else {
-    return l;
-  }
-  }
- @override
+  @override
   void initState() {
     settext();
-_all = call_all();
+    _all = call_all();
     super.initState();
   }
   @override
@@ -315,7 +299,7 @@ _all = call_all();
       appBar: AppBar(
 
         backgroundColor: Colors.green,
-        title: Text("Lập trình "+type()),
+        title: Text("Tìm ứng viên"),
       ),
       body: FutureBuilder(
         future: _all,
@@ -361,11 +345,11 @@ _all = call_all();
                                 ),
                                 Column(
                                   children: [
-                                    Text("Chức vụ",style: TextStyle(fontWeight: FontWeight.bold)),
+                                    Text("Trình độ",style: TextStyle(fontWeight: FontWeight.bold)),
                                     DropdownButton(
-                                      value: curren_position,
-                                      items: _positiondropDownMenuItems,
-                                      onChanged: changedpositionDropDownItem,
+                                      value: curren_education,
+                                      items: _EducationdropDownMenuItems,
+                                      onChanged: changededucationDropDownItem,
                                     ),
                                   ],
                                 ) ,
@@ -376,11 +360,11 @@ _all = call_all();
                               children: [
                                 Column(
                                   children: [
-                                    Text("Thời gian",style: TextStyle(fontWeight: FontWeight.bold)),
+                                    Text("Kỹ năng chuyên môn",style: TextStyle(fontWeight: FontWeight.bold)),
                                     DropdownButton(
-                                      value: curren_time,
-                                      items: _timedropDownMenuItems,
-                                      onChanged: changedtimeDropDownItem,
+                                      value: curren_skill,
+                                      items: _SkilldropDownMenuItems,
+                                      onChanged: changedskillDropDownItem,
                                     ),
                                   ],
                                 ),
@@ -429,8 +413,9 @@ _all = call_all();
 
   }
   Widget _listjobs(){
-    return Padding(
-      padding: const EdgeInsets.all(10),
+    return
+    Padding(
+      padding: const EdgeInsets.only(right: 40),
       child: ListView.builder(
         shrinkWrap: true,
         itemCount: search?list_search.length:list_all.length,
@@ -439,7 +424,8 @@ _all = call_all();
         itemBuilder: (BuildContext context, int index) {
           return FlatButton(
             onPressed: () {
-              Navigator.push(context, new MaterialPageRoute(builder: (context)=>JobDetailPage(id: search?list_search.elementAt(index).id:list_all.elementAt(index).id)));
+              Navigator.push(context, new MaterialPageRoute(builder: (context)=>profile(my_acc: false,id:search?
+              list_search.elementAt(index).id.toString():list_all.elementAt(index).id.toString())));
             },
             child: Flex(
               direction: Axis.horizontal,
@@ -452,34 +438,87 @@ _all = call_all();
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Container(
-                              width: MediaQuery.of(context).size.width / 4.5,
-                              child: Container(
-                                  height: MediaQuery.of(context).size.width / 5,
-                                  width:MediaQuery.of(context).size.width / 5 ,
-                                  child: Image.asset("assets/jobs_item.png")),
+                              width: MediaQuery.of(context).size.width / 3.5,
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    width: MediaQuery.of(context).size.width / 5,
+                                    height: MediaQuery.of(context).size.width / 7,
+                                    child: CircleAvatar(
+                                        radius: 50,
+                                        backgroundImage:search?( list_search.elementAt(index).avatar.toString()=="null"
+                                            ? AssetImage(
+                                            'assets/user_null.jpg')
+                                            : NetworkImage(
+                                            list_search.elementAt(index).avatar.toString()
+                                        )):(
+                                            list_all.elementAt(index).avatar.toString()=="null"
+                                                ? AssetImage(
+                                                'assets/user_null.jpg')
+                                                : NetworkImage(
+                                                list_all.elementAt(index).avatar.toString()
+                                            )
+                                        ),
+                                        backgroundColor: Colors.transparent),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 8.0),
+                                    child: FlatButton(
+                                      onPressed: () {
+                                        Navigator.push(context, new MaterialPageRoute(builder: (context)=>profile(my_acc: false,id:search?
+                                        list_search.elementAt(index).id.toString():list_all.elementAt(index).id.toString())));
+                                      },
+                                      child: Container(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5),
+                                          child: Text(
+                                            'Xem hồ sơ',
+                                            style: TextStyle(
+                                                fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                    30,
+                                                color: Colors.blue),
+                                          ),
+                                        ),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.blue),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(
                                   left: 10, right: 10, bottom: 10, top: 5),
                               child: Container(
-                                width: MediaQuery.of(context).size.width / 1.5,
+                                width: MediaQuery.of(context).size.width / 2,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      search?list_search.elementAt(index).company_name.toUpperCase():list_all.elementAt(index).company_name.toUpperCase(),
+                                      search?list_search.elementAt(index).name:list_all.elementAt(index).name,
                                       style: TextStyle(
                                           fontSize:
-                                          MediaQuery.of(context).size.width / 20,
+                                          MediaQuery.of(context).size.width / 24,
                                           color: Colors.blue),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.fromLTRB(0,10,0,10),
+                                      padding: const EdgeInsets.only(top: 10),
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text(search?"CÔNG VIỆC: "+list_search.elementAt(index).title:"CÔNG VIỆC: "+list_all.elementAt(index).title),
-                                          Text(search?"MỨC LƯƠNG: "+_saraly(list_search.elementAt(index).saraly).toString():"MỨC LƯƠNG: "+_saraly(list_all.elementAt(index).saraly).toString())
+                                          search?Text(list_search.elementAt(index).gender.toString()=="null"?"Chưa rõ giới tính"
+                                              :"Giới tính: "+list_search.elementAt(index).gender.toString())
+                                              :Text(list_all.elementAt(index).gender.toString()=="null"?"Chưa rõ giới tính"
+                                              :"Giới tính: "+list_all.elementAt(index).gender.toString()),
+                                          search?Text(list_search.elementAt(index).tuoi.toString()=="null"?"Chưa rõ năm sinh"
+                                              :"Năm sinh: "+tuoi(list_search.elementAt(index).tuoi))
+                                              :Text(list_all.elementAt(index).tuoi.toString()=="null"?"Chưa rõ năm sinh"
+                                              :"Năm sinh: "+tuoi(list_all.elementAt(index).tuoi)),
                                         ],
                                       ),
                                     ),
@@ -505,5 +544,6 @@ _all = call_all();
         },
       ),
     );
+
   }
 }

@@ -8,6 +8,7 @@ import 'package:find_jobs/screen/HomeScreen.dart';
 import 'package:find_jobs/screen/LoginScreen.dart';
 import 'package:find_jobs/screen/NewScreen.dart';
 import 'package:find_jobs/screen/Seach_fillter.dart';
+import 'package:find_jobs/screen/Search_fillter_user.dart';
 import 'package:find_jobs/screen/introduce_screen.dart';
 import 'package:find_jobs/screen/job_detail/job_detail_page.dart';
 import 'package:find_jobs/screen/my_apply_job/my_apply_jobs_page.dart';
@@ -346,7 +347,8 @@ class _drawer extends State<Drawer_findjobs> {
                   //color: Colors.blue,
                   textColor: Colors.white,
                   onPressed: () {
-
+                    Navigator.of(context).pop();
+                    Navigator.push(context, new MaterialPageRoute(builder: (context)=>Search_fillter_user()));
                   },
                 ),
               ),

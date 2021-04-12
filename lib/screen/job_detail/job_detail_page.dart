@@ -344,7 +344,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
   }
 
   String _convertDateTime(int time){
-    var date = new DateTime.fromMicrosecondsSinceEpoch(time);
+    var date = new DateTime.fromMicrosecondsSinceEpoch(time*1000);
     String formattedDate = DateFormat('dd-MM-yyyy').format(date);
     return formattedDate;
   }

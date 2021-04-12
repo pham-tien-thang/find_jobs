@@ -102,7 +102,7 @@ print("chay build");
                                                 padding: const EdgeInsets.only(top: 8.0),
                                                 child: FlatButton(
                                                   onPressed: () {
-
+                                                    Navigator.push(context, new MaterialPageRoute(builder: (context)=>profile(my_acc: false,id: snapshot.data['users'][index]['id'].toString())));
                                                   },
                                                   child: Container(
                                                     child: Padding(
