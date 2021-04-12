@@ -62,7 +62,10 @@ class _Mydangky extends State<Mydangky> {
   }
   //------------call api
   signup()async{
-    if (validatePassword()){
+    if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(mail.text)){
+      showToast("Email sai định dạng", context, Colors.redAccent, Icons.clear);
+    }
+    else if (validatePassword()){
       setState(() {
         ready = false;
       });
