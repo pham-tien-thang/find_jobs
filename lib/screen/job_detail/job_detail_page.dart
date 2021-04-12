@@ -75,7 +75,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
           color: Colors.white,
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text("Chi tiết ngành nghề"),
+        title: Text("Chi tiết công việc"),
         centerTitle: false,
         backgroundColor: AppColor.main,
       ),
@@ -303,12 +303,12 @@ class _JobDetailPageState extends State<JobDetailPage> {
               height: 10,
             ),
             _buildFieldJobDetail('Yêu cầu kinh nghiệm : ',
-                jobNewDetailEntity.requiredNumberYearsOfExperiences.toString()),
+                jobNewDetailEntity.requiredNumberYearsOfExperiences.toString()+" Năm"),
             SizedBox(
               height: 10,
             ),
             _buildFieldJobDetail('Số lượng nhân viên : ',
-                jobNewDetailEntity.companySizeByNumberEmployees.toString()),
+                jobNewDetailEntity.companySizeByNumberEmployees.toString()+" Người"),
             SizedBox(
               height: 10,
             ),
