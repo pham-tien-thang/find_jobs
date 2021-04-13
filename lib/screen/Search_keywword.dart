@@ -283,14 +283,15 @@ List<Job_mew_model> list_all = [];
           return FlatButton(
             onPressed: () {
               FocusScopeNode currentFocus = FocusScope.of(context);
-              if (!currentFocus.hasPrimaryFocus) {
+              if (currentFocus.hasPrimaryFocus||currentFocus.hasFocus) {
                 currentFocus.unfocus();
+                print(currentFocus.hasPrimaryFocus);
 
               }
-             else{
-                Navigator.push(context, new MaterialPageRoute(builder: (context)=>JobDetailPage(id: search?list_search.elementAt(index).id:list_all.elementAt(index).id)));
-              }
-            },
+
+           Navigator.push(context, new MaterialPageRoute(builder: (context)=>JobDetailPage(id: search?list_search.elementAt(index).id:list_all.elementAt(index).id)));}
+
+            ,
             child: Flex(
               direction: Axis.horizontal,
               children: [

@@ -241,15 +241,16 @@ else{
     });
     Skill_jobs c = new Skill_jobs(name: curren_skill);
    for(int i = 0 ; i < list_all.length;i++){
+     print(list_all.elementAt(i).address.toString() == curren_address);
   if(
 
-  ( curren_address =="Tất cả địa chỉ"?true:list_all.elementAt(i).address.toString() == curren_address.toString())
-      && (curren_education=="Tất cả"?true:list_all.elementAt(i).level.toString() == curren_education)
-      &&curren_saraly =="Tất cả"?true:
+  ( curren_address =="Tất cả địa chỉ"?true:list_all.elementAt(i).address == curren_address)
+      && (curren_education=="Tất cả"?true:list_all.elementAt(i).level == curren_education)
+      &&(curren_saraly =="Tất cả"?true:
   (list_all.elementAt(i).salary.toString()=="null"
       ?false
       :(int.parse(list_all.elementAt(i).salary.toString())<=curren_saraly_model.max&&
-      int.parse(list_all.elementAt(i).salary.toString())>=curren_saraly_model.min))
+      int.parse(list_all.elementAt(i).salary.toString())>=curren_saraly_model.min)))
     &&(curren_skill =="Tất cả"?true:list_all.elementAt(i).skill.any((e) => e.name == c.name))
   ){
     list_search.add(list_all[i]);
