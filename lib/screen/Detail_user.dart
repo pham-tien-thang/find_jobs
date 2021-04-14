@@ -47,6 +47,8 @@ class _profile extends State<profile> {
   String contact;
   Future _detail;
   String candicate='';
+  String edu="Học vấn: \n";
+  String exp="Kinh nghiệm làm việc: \n";
   String mail_candicate;
   DateTime now = new DateTime.now();
   final DateFormat formatter = DateFormat('dd/MM/yyyy');
@@ -59,15 +61,17 @@ class _profile extends State<profile> {
   call_api_detail()async{
     String ten;  String gioitinh;  String luong;  String time;  String bangcap;  String year_exp;  String mota;
     String ngaysinh;  String diachi;  String phone;  String mail;  String muctieu=""; String kynang="";
-
+String tencty; String chucvu; String motacongviec; String vao; String ra;
+String tentruong; String chuyennganh ; String capbac; String vaolop;String ralop; String thanhtich;
     Api_findjobs a = new Api_findjobs(widget.my_acc?"/api/users/details-get-id":"/api/users/details-get-id", {
       //'userId': ,
       'userId': widget.my_acc?sharedPrefs.user_id.toString():widget.id,
     },);
 var res = await a.postMethod();
+candicate = "Kinh nghiệm làm việc\n";
+exp = "";
+edu="Học vấn\n";
     print(res);
-    var ungvien = res['data']['user'];
-print(res['data']['jobSkills'].toString());
    // =========================
     if( res['data']['jobSkills'].length>0){
    for(int i= 0;i< res['data']['jobSkills'].length ;i++){
@@ -85,6 +89,35 @@ print(res['data']['jobSkills'].toString());
         kynang = "chưa có";
 
     }
+    //====exp
+    if(res['data']['experiences'].length>0){
+      print(res['data']['experiences'].length.toString()+"exp");
+     for(int i =0; i < res['data']['experiences'].length ;i++ ){
+
+tencty = res['data']['experiences'][i]['companyName'].toString()=="null"?"Tên công ty: Chưa có \n":"Tên công ty: "+res['data']['experiences'][i]['companyName']+"\n";
+chucvu =  res['data']['experiences'][i]['jobTitle'].toString()=="null"?"Chức vụ: Chưa có\n":"Chức vụ: "+ res['data']['experiences'][i]['jobTitle']+"\n";
+motacongviec =res['data']['experiences'][i]['jobDetails'].toString()=="null"?"Mô tả: Chưa có\n":"Mô tả: "+res['data']['experiences'][i]['jobDetails']+"\n";
+vao =res['data']['experiences'][i]['dateInMilliseconds'].toString()=="null"?"Ngày vào: Chưa có\n": "Ngày vào: "+birth(res['data']['experiences'][i]['dateInMilliseconds'].toString())+"\n";
+ra = res['data']['experiences'][i]['dateOutMilliseconds'].toString()=="null"?"Ngày ra: Chưa có\n":"Ngày ra: "+birth(res['data']['experiences'][i]['dateOutMilliseconds'].toString())+"\n";
+exp += tencty+chucvu+motacongviec+vao+ra+"---------"+"\n";
+     }
+    }
+    else{exp = "Kinh nghiệm làm việc: \n"+"Chưa có \n";}
+    //==================edu
+    if(res['data']['education'].length>0){
+      print(res['data']['education'][0]);
+      for(int i =0; i < res['data']['education'].length ;i++ ){
+        tentruong = res['data']['education'][i]['schoolName'].toString()=="null"?"Tên trường: Chưa có \n":"Tên trường: "+res['data']['education'][i]['schoolName']+"\n";
+        chuyennganh =  res['data']['education'][i]['major'].toString()=="null"?"Chuyên ngành: Chưa có\n":"Chuyên ngành: "+ res['data']['education'][i]['major']+"\n";
+        capbac =  res['data']['education'][i]['academicDegreeLevel'].toString()=="null"?"Hệ: Chưa có\n":"Hệ: "+ res['data']['education'][i]['academicDegreeLevel']+"\n";
+        thanhtich =res['data']['education'][i]['achievements'].toString()=="null"?"Thành tích: Chưa có\n":"Thành tích: "+res['data']['education'][i]['achievements']+"\n";
+        vaolop =res['data']['education'][i]['startDateInMilliseconds'].toString()=="null"?"Ngày vào: Chưa có\n": "Ngày vào: "+birth(res['data']['education'][i]['startDateInMilliseconds'].toString())+"\n";
+        ralop = res['data']['education'][i]['endDateInMilliseconds'].toString()=="null"?"Ngày ra: Chưa có\n":"Ngày ra: "+birth(res['data']['education'][i]['endDateInMilliseconds'].toString())+"\n";
+        edu += tentruong+capbac+thanhtich+vaolop+ralop+"---------"+"\n";
+      }
+    }
+    else{exp = "Học vấn: \n"+"Chưa có \n";}
+
 
 ten = res['data']['user']['fullName'].toString()=="null"?"chưa có":res['data']['user']['fullName'].toString();
 gioitinh = res['data']['user']['gender'].toString()=="null"?"chưa có":res['data']['user']['gender'].toString();
@@ -104,12 +137,14 @@ candicate = "Họ và tên: "+ten+"\n"
     "Ngày sinh: "+ngaysinh+"\n"
     "Mức lương: "+luong+"\n"
     "Bằng cấp: "+bangcap+"\n"
+    "Thời gian: "+time+"\n"
     "Số năm kinh nghiệm: "+year_exp+"\n"
     "Mô tả: "+mota+"\n"
+    "Mục tiêu: "+muctieu+"\n"
     "Địa chỉ: "+diachi+"\n"
     "Số điện thoại: "+phone+"\n"
     "Email: "+mail+"\n"
-    "Kỹ năng: "+kynang
+    "Kỹ năng: "+kynang+"\n"
 ;
 
     return res;
@@ -198,7 +233,7 @@ candicate = "Họ và tên: "+ten+"\n"
  if(s=="Lưu hồ sơ"){
    var receiver = sharedPrefs.email;
    final Email email = Email(
-     body: candicate,
+     body: candicate+"==============================\n"+exp+"==============\n"+edu,
      subject: 'Cv ứng viên',
      recipients: [receiver],
      isHTML: false,
