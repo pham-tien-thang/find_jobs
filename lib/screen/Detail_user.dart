@@ -20,9 +20,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class profile extends StatefulWidget {
   profile({Key key,this.my_acc,this.id}) : super(key: key);
@@ -44,17 +46,76 @@ class _profile extends State<profile> {
   bool h = false;
   String contact;
   Future _detail;
+  String candicate='';
+  String mail_candicate;
+  DateTime now = new DateTime.now();
+  final DateFormat formatter = DateFormat('dd/MM/yyyy');
+  String birth(String b){
+    var dateConvert = new DateTime.fromMillisecondsSinceEpoch(
+        int.parse(b) );
+    String t = formatter.format(dateConvert);
+    return t;
+  }
   call_api_detail()async{
+    String ten;  String gioitinh;  String luong;  String time;  String bangcap;  String year_exp;  String mota;
+    String ngaysinh;  String diachi;  String phone;  String mail;  String muctieu=""; String kynang="";
+
     Api_findjobs a = new Api_findjobs(widget.my_acc?"/api/users/details-get-id":"/api/users/details-get-id", {
       //'userId': ,
       'userId': widget.my_acc?sharedPrefs.user_id.toString():widget.id,
     },);
 var res = await a.postMethod();
     print(res);
+    var ungvien = res['data']['user'];
+print(res['data']['jobSkills'].toString());
+   // =========================
+    if( res['data']['jobSkills'].length>0){
+   for(int i= 0;i< res['data']['jobSkills'].length ;i++){
+     if(res['data']['jobSkills'].length<=1||i ==res['data']['jobSkills'].length-1 ){
+       kynang +=res['data']['jobSkills'][i]['skillName'].toString()+".";
+     }
+     else
+     {
+       kynang += res['data']['jobSkills'][i]['skillName'].toString()+", ";
+     }
+   }
+    }
+    else{
+
+        kynang = "chưa có";
+
+    }
+
+ten = res['data']['user']['fullName'].toString()=="null"?"chưa có":res['data']['user']['fullName'].toString();
+gioitinh = res['data']['user']['gender'].toString()=="null"?"chưa có":res['data']['user']['gender'].toString();
+luong = res['data']['user']['expectedSalaryInVnd'].toString()=="null"?"chưa có":res['data']['user']['expectedSalaryInVnd'].toString();
+time = res['data']['user']['typeOfWork'].toString()=="null"?"chưa có":res['data']['user']['typeOfWork'].toString();
+bangcap = res['data']['user']['graduatedEducation'].toString()=="null"?"chưa có": res['data']['user']['graduatedEducation'].toString();
+year_exp = res['data']['user']['yearsOfExperiences'].toString()=="null"?"chưa có":res['data']['user']['yearsOfExperiences'].toString();
+mota = res['data']['user']['resumeSummary'].toString()=="null"?"chưa có":res['data']['user']['resumeSummary'].toString();
+diachi = res['data']['user']['stateProvinceName'].toString()=="null"?"chưa có":res['data']['user']['stateProvinceName']+", "+res['data']['user']['districtName']+", "+res['data']['user']['subdistrictName'];
+phone = res['data']['user']['phone'].toString()=="null"?"chưa có":res['data']['user']['phone'].toString();
+mail = res['data']['user']['email'].toString()=="null"?"chưa có":res['data']['user']['email'].toString();
+mail_candicate = res['data']['user']['email'].toString()=="null"?"chưa có":res['data']['user']['email'].toString();
+muctieu = res['data']['user']['careerObjective'].toString()!="null"?"chưa có":res['data']['user']['careerObjective'].toString();
+ngaysinh = res['data']['user']['birthdayInMilliseconds'].toString()=="null"?"chưa có":birth(res['data']['user']['birthdayInMilliseconds'].toString());
+candicate = "Họ và tên: "+ten+"\n"
+    "Giới tính: "+gioitinh+"\n"
+    "Ngày sinh: "+ngaysinh+"\n"
+    "Mức lương: "+luong+"\n"
+    "Bằng cấp: "+bangcap+"\n"
+    "Số năm kinh nghiệm: "+year_exp+"\n"
+    "Mô tả: "+mota+"\n"
+    "Địa chỉ: "+diachi+"\n"
+    "Số điện thoại: "+phone+"\n"
+    "Email: "+mail+"\n"
+    "Kỹ năng: "+kynang
+;
+
     return res;
   }
   Future<void> _refresh() async {
-   call_api_detail();
+    _detail = call_api_detail();
   }
 
   _onUpdateScroll(ScrollMetrics metrics) {
@@ -133,10 +194,33 @@ var res = await a.postMethod();
       Navigator.push(context, MaterialPageRoute(builder: (context) => MyApplyJobsPage()));
     }
   }
+  void sendmail(String s) async{
+ if(s=="Lưu hồ sơ"){
+   var receiver = sharedPrefs.email;
+   final Email email = Email(
+     body: candicate,
+     subject: 'Cv ứng viên',
+     recipients: [receiver],
+     isHTML: false,
+   );
+   print('da tao 1 mail');
+   await FlutterEmailSender.send(email);
+ }else{
+   final Email email = Email(
+     body: "Nhập nội dung...",
+     subject: 'Tuyển dụng',
+     recipients: [mail_candicate],
+     isHTML: false,
+   );
+   print('da tao 1 mail');
+   await FlutterEmailSender.send(email);
+ }
+  }
   @override
   Widget build(BuildContext context) {
     sharedPrefs.init();
 _detail = call_api_detail();
+    print("A");
     double mda = MediaQuery.of(context).size.width;
     return Scaffold(
       floatingActionButton: ButtonPair( s: scrollControllers,
@@ -221,7 +305,27 @@ _detail = call_api_detail();
                             }).toList();
                           },
                         )
-                      ]:null,
+                      ]:<Widget>[
+                        PopupMenuButton<String>(
+                          onSelected: sendmail,
+                          itemBuilder: (BuildContext context){
+                            return Option.sender_mail.map((String choice){
+                              return PopupMenuItem<String>(
+                                value: choice,
+                                child: Row(
+                                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                        child: Text(choice)
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList();
+                          },
+                        )
+                      ],
                       expandedHeight: 176.0,
                       floating: true,
                       pinned: true,

@@ -243,7 +243,6 @@ else{
    for(int i = 0 ; i < list_all.length;i++){
      print(list_all.elementAt(i).address.toString() == curren_address);
   if(
-
   ( curren_address =="Tất cả địa chỉ"?true:list_all.elementAt(i).address == curren_address)
       && (curren_education=="Tất cả"?true:list_all.elementAt(i).level == curren_education)
       &&(curren_saraly =="Tất cả"?true:
