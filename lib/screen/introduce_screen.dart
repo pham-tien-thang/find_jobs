@@ -25,7 +25,7 @@ class _IntroduceScreenPage extends State<IntroduceScreen> {
                 _buildFirstPage(
                   image: 'assets/developer.png',
                   content:
-                  '"Bạn là sinh viên mới ra trường đang cần tìm một chỗ để thực tập ? , hay là một developer muốn nhảy việc để tìm kiếm những cơ hội mới nhưng vẫn chưa tìm được một nơi thích hợp để thể hiện khả năng của mình   "',
+                  '"Bạn là 1 lập trình viên muốn tìm 1 công việc phù hợp ? , hay là một nhà tuyển dụng cần tuyển những ứng viên chất lượng cho công ty mình ?   "',
                   backgroundColor: Colors.green,
                   textColor: Colors.white,
                 ),
