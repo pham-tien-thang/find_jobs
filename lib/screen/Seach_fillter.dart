@@ -12,6 +12,7 @@ import 'package:find_jobs/model_thang/Jobsnew_candicate.dart';
 import 'package:find_jobs/model_thang/Saraly_model.dart';
 import 'package:find_jobs/model_thang/Skill_jobs.dart';
 import 'package:find_jobs/model_thang/Unapproved_model.dart';
+import 'package:find_jobs/model_thang/arr_dropbutton.dart';
 import 'package:find_jobs/model_thang/job_new_model.dart';
 import 'package:find_jobs/screen/job_detail/job_detail_page.dart';
 import 'package:find_jobs/tab_in_approve/Candicate_screen.dart';
@@ -37,17 +38,24 @@ class _Search_jobs extends State<Search_jobs> {
   List<DropdownMenuItem<String>> _positiondropDownMenuItems ;
   List<DropdownMenuItem<String>> _timedropDownMenuItems ;
   List<DropdownMenuItem<String>> _saralydropDownMenuItems ;
+  List<DropdownMenuItem<String>> _huyendropDownMenuItems ;
+  List<DropdownMenuItem<String>> _ngonngudropDownMenuItems ;
   String curren_address;
   String curren_position;
+  String curren_huyen;
   String curren_time;
   String curren_saraly;
+  String curren_language;
   Future _all;
   bool search = false;
+  bool load= false;
   List<Job_mew_model> list_all=[];
   List<Job_mew_model> list_search=[];
   List<Job_mew_model> list_hienthi=[];
   List address = [
   ];
+  List id_tinh = [];
+  List huyen = [];
   List position = [
     "Tất cả",
     "Thực tập",
@@ -76,7 +84,20 @@ class _Search_jobs extends State<Search_jobs> {
     "Part-time",
     "Freelance",
   ];
-
+  List<DropdownMenuItem<String>> gethuyenDropDownMenuItems() {
+    List<DropdownMenuItem<String>> items = new List();
+    for (String de in huyen) {
+      items.add(drop(de));
+    }
+    return items;
+  }
+  List<DropdownMenuItem<String>> getngonnguDropDownMenuItems() {
+    List<DropdownMenuItem<String>> items = new List();
+    for (String de in ngonngu) {
+      items.add(drop(de));
+    }
+    return items;
+  }
   List<DropdownMenuItem<String>> getaddressDropDownMenuItems() {
     List<DropdownMenuItem<String>> items = new List();
     for (String de in address) {
@@ -111,7 +132,7 @@ class _Search_jobs extends State<Search_jobs> {
         child: Center(
           child:Text(
             d,
-            style: TextStyle(fontSize: 14,),
+            style: TextStyle(fontSize: 12,),
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
           ),
@@ -183,6 +204,7 @@ if(list_skill.length>0){
     res_all['jobNewsArr'][i]['jobTitleName'],
   res_all['jobNewsArr'][i]['salaryInVnd'].toString(),
     res_all['jobNewsArr'][i]['typeOfWorkName'],
+    res_all['jobNewsArr'][i]['districtName'].toString(),
     list_skill,
   );
   list_all.add(j);
@@ -209,35 +231,101 @@ else {
   return 1;
 }
  }
+ call_huyen(String idtinh)async{
+
+    setState(() {
+      load = true;
+      huyen.clear();
+      huyen.add("Tất cả");
+    });
+    Api_findjobs get_api_huyen = new Api_findjobs("/api/districts/get-districts-by-state-province-id", {
+      "stateProvinceId":idtinh
+    },);
+    var res = await get_api_huyen.postMethod();
+    for(int i = 0 ; i<res['districts'].length;i++){
+      huyen.add(res['districts'][i]['name']);
+    }
+    setState(() {
+      curren_huyen = huyen[0];
+      _huyendropDownMenuItems = gethuyenDropDownMenuItems();
+      load = false;
+    });
+ }
   call_tinh()async{
     setState(() {
       address.clear();
+      id_tinh.clear();
     });
     Api_findjobs get_api_tinh = new Api_findjobs("/api/states-provinces", {
       "":""
     },);
     var res = await get_api_tinh.getMethod();
     address.add("Tất cả địa chỉ");
+    huyen.add("Tất cả");
     for(int i = 0 ; i<res['stateProvinces'].length;i++){
       address.add(res['stateProvinces'][i]['name']);
+      id_tinh.add(res['stateProvinces'][i]['stateProvinceId']);
     }
     setState(() {
+      curren_huyen = huyen[0];
       curren_address = address[0];
       _AddressdropDownMenuItems = getaddressDropDownMenuItems();
+      _huyendropDownMenuItems = gethuyenDropDownMenuItems();
     });
     return res;
   }
   void changedaddressDropDownItem(String selectedCity) {
-setState(() {
-curren_address = selectedCity;
-});
-call_search();
+if(!load){
+  setState(() {
+    curren_address = selectedCity;
+  });
+  if(curren_address != "Tất cả địa chỉ"){
+    huyen.clear();
+    for(int i = 0; i < address.length ;i++){
+
+      if(curren_address == address[i]){
+        print(id_tinh[i-1].toString()+address[i]);
+        call_huyen(id_tinh[i-1].toString());
+        break;
+      }
+    }
+//  call_huyen(idtinh)
+  }
+  else{
+    setState(() {
+      huyen.clear();
+      huyen.add("Tất cả");
+      curren_huyen = huyen[0];
+      _huyendropDownMenuItems = gethuyenDropDownMenuItems();
+    });
+  }
+  call_search();
+}
+else{
+  showToast("Đang làm mới huyện", context, Colors.orange, Icons.replay_circle_filled);
+}
   }
   void changedpositionDropDownItem(String selectedCity) {
     setState(() {
 curren_position = selectedCity;
     });
     call_search();
+  }
+  void changedhuyenDropDownItem(String selectedCity) {
+   if(!load){
+     setState(() {
+       curren_huyen = selectedCity;
+     });
+     call_search();
+   }
+   else{
+     showToast("Đang làm mới huyện", context, Colors.orange, Icons.replay_circle_filled);
+   }
+  }
+  void changedngonnguDropDownItem(String selectedCity) {
+  setState(() {
+    curren_language = selectedCity;
+  });
   }
   void changedsaralyDropDownItem(String selectedCity) {
     setState(() {
@@ -265,8 +353,10 @@ curren_time  = selectedCity;
       list_search.clear();
     });
     for(int i = 0 ; i< list_all.length;i++){
+      print(i);
       if(
       (curren_address=="Tất cả địa chỉ"?true:list_all.elementAt(i).address == curren_address)&&
+           (curren_huyen=="Tất cả"?true:list_all.elementAt(i).huyen == curren_huyen)&&
           (curren_position=="Tất cả"?true:list_all.elementAt(i).position == curren_position)&&
           ( curren_time=="Tất cả"?true:list_all.elementAt(i).time == curren_time)&&
    (int.parse(list_all.elementAt(i).saraly)<=curren_saraly_model.max&&int.parse(list_all.elementAt(i).saraly)>=curren_saraly_model.min)
@@ -274,19 +364,20 @@ curren_time  = selectedCity;
         list_search.add(list_all[i]);
       }
       else{
-        print(list_all.elementAt(i).time);
+       // print(list_all.elementAt(i).time);
       }
     }
     print("có"+list_search.length.toString()+"kết quả");
   }
   settext(){
     setState(() {
+      curren_language = ngonngu[0];
       curren_saraly_model= list_luong[0];
       curren_saraly = luong[0];
       curren_time = type_of_w[0];
       curren_position = position[0];
     });
-
+_ngonngudropDownMenuItems = getngonnguDropDownMenuItems();
     _saralydropDownMenuItems = getsaralyDropDownMenuItems();
     _timedropDownMenuItems = gettimeDropDownMenuItems();
     _positiondropDownMenuItems = getpositionDropDownMenuItems();
@@ -349,7 +440,7 @@ _all = call_all();
                               children: [
                                 Column(
                                   children: [
-                                    Text("Địa chỉ",style: TextStyle(fontWeight: FontWeight.bold),),
+                                    Text("Tỉnh/TP",style: TextStyle(fontWeight: FontWeight.bold),),
                                     Center(
                                       child: DropdownButton(
                                         value: curren_address,
@@ -361,11 +452,11 @@ _all = call_all();
                                 ),
                                 Column(
                                   children: [
-                                    Text("Chức vụ",style: TextStyle(fontWeight: FontWeight.bold)),
+                                    Text("Quận/huyện",style: TextStyle(fontWeight: FontWeight.bold)),
                                     DropdownButton(
-                                      value: curren_position,
-                                      items: _positiondropDownMenuItems,
-                                      onChanged: changedpositionDropDownItem,
+                                      value: curren_huyen,
+                                      items: _huyendropDownMenuItems,
+                                      onChanged: changedhuyenDropDownItem,
                                     ),
                                   ],
                                 ) ,
@@ -395,7 +486,34 @@ _all = call_all();
                                   ],
                                 ) ,
                               ],
-                            )
+                            ),
+                            Row(
+                              mainAxisAlignment:  MainAxisAlignment.spaceAround,
+                              children: [
+                                Column(
+                                  children: [
+                                    Text("Ngôn ngữ",style: TextStyle(fontWeight: FontWeight.bold),),
+                                    Center(
+                                      child: DropdownButton(
+                                        value: curren_language,
+                                        items: _ngonngudropDownMenuItems,
+                                        onChanged: changedngonnguDropDownItem,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    Text("Chức vụ",style: TextStyle(fontWeight: FontWeight.bold)),
+                                    DropdownButton(
+                                      value: curren_position,
+                                      items: _positiondropDownMenuItems,
+                                      onChanged: changedpositionDropDownItem,
+                                    ),
+                                  ],
+                                ) ,
+                              ],
+                            ),
 
                           ],
                         ),
@@ -405,7 +523,7 @@ _all = call_all();
                   SizedBox(height: 15,),
                   SingleChildScrollView(
                     child: Container(
-                      height: mda_h/1.75,
+                      height: mda_h/1.5,
                       child: _listjobs(),
                       decoration:  BoxDecoration(
                         color: Colors.green.shade50,

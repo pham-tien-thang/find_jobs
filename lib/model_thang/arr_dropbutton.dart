@@ -1,0 +1,20 @@
+List ngonngu = [
+  "Tất cả",
+  "Java",
+  "Kotlin",
+  "Swift",
+  "Objective-C",
+  "JavaScript",
+  "TypeScript",
+  "C",
+  "C++",
+  "C#",
+  "Python",
+  "Ruby",
+  "PHP",
+  "Shell",
+  "Go",
+  "HTML/CSS",
+  "SQL",
+  "Ngôn ngữ khác"
+];
