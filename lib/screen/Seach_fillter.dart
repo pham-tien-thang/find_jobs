@@ -205,6 +205,7 @@ if(list_skill.length>0){
   res_all['jobNewsArr'][i]['salaryInVnd'].toString(),
     res_all['jobNewsArr'][i]['typeOfWorkName'],
     res_all['jobNewsArr'][i]['districtName'].toString(),
+    res_all['jobNewsArr'][i]['requiredTechnologyText'].toString(),
     list_skill,
   );
   list_all.add(j);
@@ -326,6 +327,7 @@ curren_position = selectedCity;
   setState(() {
     curren_language = selectedCity;
   });
+  call_search();
   }
   void changedsaralyDropDownItem(String selectedCity) {
     setState(() {
@@ -358,6 +360,7 @@ curren_time  = selectedCity;
       (curren_address=="Tất cả địa chỉ"?true:list_all.elementAt(i).address == curren_address)&&
            (curren_huyen=="Tất cả"?true:list_all.elementAt(i).huyen == curren_huyen)&&
           (curren_position=="Tất cả"?true:list_all.elementAt(i).position == curren_position)&&
+          (curren_language=="Tất cả"?true:list_all.elementAt(i).language.contains(curren_language))&&
           ( curren_time=="Tất cả"?true:list_all.elementAt(i).time == curren_time)&&
    (int.parse(list_all.elementAt(i).saraly)<=curren_saraly_model.max&&int.parse(list_all.elementAt(i).saraly)>=curren_saraly_model.min)
       ){

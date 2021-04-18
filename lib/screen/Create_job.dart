@@ -6,9 +6,11 @@ import 'package:find_jobs/helper/Api_findjobs.dart';
 import 'package:find_jobs/helper/Preferences.dart';
 import 'package:find_jobs/helper/Toast.dart';
 import 'package:find_jobs/item_app/Regulations.dart';
+import 'package:find_jobs/model/Option.dart';
 import 'package:find_jobs/model_thang/Approved_model.dart';
 import 'package:find_jobs/model_thang/Jobsnew_candicate.dart';
 import 'package:find_jobs/model_thang/Unapproved_model.dart';
+import 'package:find_jobs/model_thang/arr_dropbutton.dart';
 import 'package:find_jobs/screen/job_detail/job_detail_page.dart';
 import 'package:find_jobs/tab_in_approve/Candicate_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,6 +41,7 @@ class _Create_job extends State<Create_job> {
   bool check_web =false;
   bool loading = false;
   String id_xa_selec;
+  String language = "Không yêu cầu";
   List<DropdownMenuItem<String>> _positiondropDownMenuItems ;
   List<DropdownMenuItem<String>> _typedropDownMenuItems ;
   List<DropdownMenuItem<String>> _tinhdropDownMenuItems ;
@@ -261,6 +264,7 @@ class _Create_job extends State<Create_job> {
 
     });
   }
+
   void changedtypeDropDownItem(String selectedCity) {
 setState(() {
   current_typeofwork = selectedCity;
@@ -279,6 +283,125 @@ setState(() {
         builder: (BuildContext context) {
           return Regulations(w,h,context);
         });
+  }
+var checklist=[];
+  show_language(){
+    showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context,setState){
+            return Dialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius:BorderRadius.circular(10),
+              ), //this right here
+              child: Container(
+                decoration:  BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      Colors.green,
+                      Colors.blue,
+                    ],
+                  ),
+                ),
+                child:Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child:   Container(
+                    decoration:  BoxDecoration(
+                       // borderRadius: BorderRadius.all(Radius.circular(22.5)),
+                        color: Colors.white
+                    ),
+                    child: SingleChildScrollView(
+                        child: Container(
+                          color: Colors.white30,
+                          child: Column(
+                            children: [
+                              ListView.builder(
+                                shrinkWrap: true,
+                                controller: new ScrollController(),
+                                itemCount: ngonngu2.length,
+                                itemBuilder: (context, index) {
+                                  return CheckboxListTile(
+                                      title: Text(ngonngu2[index]),
+                                      value: checklist[index],
+                                      onChanged: (vl){
+                                        FocusScopeNode currentFocus = FocusScope.of(context);
+                                        if (!currentFocus.hasPrimaryFocus) {
+                                          currentFocus.unfocus();
+                                        }
+                                        setState(() {
+                                    if(index==0||index==ngonngu2.length-1){
+                                     if(checklist[index]){
+                                       checklist[index] = !checklist[index];
+                                     }
+                                     else{
+                                       checklist[index] = !checklist[index];
+                                       for(int c = 0; c<ngonngu2.length;c++){
+                                         if(c!=index){
+                                           checklist[c] = false;
+                                         }
+                                       }
+                                     }
+                                    }
+                                    else{
+                                      if(checklist[0]||checklist[ngonngu2.length-1])
+                                        {
+                                          checklist[index] = !checklist[index];
+                                          checklist[0] = false;
+                                          checklist[ngonngu2.length-1] = false;
+                                        }
+                                      else{
+                                        checklist[index] = !checklist[index];
+                                      }
+                                    }
+                                        });
+
+                                      });
+                                },
+                              ),
+                              RaisedButton(
+                          color: Colors.green,
+                                onPressed: () {
+                                  setState(() {
+                                    String a = "";
+                                    language = "";
+                              for(int i =0; i < ngonngu2.length;i++){
+                                if(checklist[i]){
+                                  a += ngonngu2[i]+", ";
+                                  language = a.substring(0,a.length-2);
+                                }
+                              }
+                                 print (language);
+                                  });
+                                  Navigator.pop(context, true);
+                                },
+                                child: Container(
+
+                                  child: Text(
+                                    "Đồng ý",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+
+                              ),
+                            ],
+                          ),
+                        )
+                    ),
+                  ),
+                ),
+              ),
+            );
+          });
+        }).then((val){
+     setState(() {
+
+     });
+    });
   }
  validate(){
     if(company_name.text.length<3||company_name.text.length>100){
@@ -361,7 +484,8 @@ else if(company_phone.text.length<10){
       "companySizeByNumberEmployees":company_size.text.toString(),
       "companyWebsite":company_website.text,
       "companyEmail":company_email.text,
-      "companyPhoneNumber":company_phone.text
+      "companyPhoneNumber":company_phone.text,
+      "requiredTechnologyText":language
     });
 
     var res_create = await api_create.postMethod();
@@ -398,6 +522,9 @@ call_edit(res_create['jobNewsId'].toString());
   }
   @override
   void initState() {
+    for(int i = 0;i < ngonngu.length;i++){
+      checklist.add(false);
+    }
     company_website.text = "https://www.";
     _address = call_tinh();
     current_position = position[0];
@@ -536,6 +663,35 @@ call_edit(res_create['jobNewsId'].toString());
                               borderSide: BorderSide(color: Colors.grey, width: 1.0)),
                           hintText: 'Ví dụ : 1000000',
                         ),
+                      ),
+                      //========================ngôn ngữ
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("Ngôn ngữ yêu cầu",style: TextStyle(fontWeight: FontWeight.bold,fontSize: mda/24),),
+                      ),
+
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                                width: mda/1.75,
+                                child: Text(language,style: TextStyle(fontSize: mda/24),
+                                overflow:  TextOverflow.ellipsis,
+                                )),
+                          ),
+                          RaisedButton(
+                            onPressed: () {
+                              ready?show_language():null;
+                            },
+                            child: Text(
+                              "Chọn",
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            color:ready?Colors.orange:Colors.grey,
+                          ),
+                        ],
                       ),
                       //===========================mo ta
                       Padding(
