@@ -68,6 +68,9 @@ class JobNewDetailEntity{
   String companyPhoneNumber;
 
   @JsonKey()
+  String requiredTechnologyText;
+
+  @JsonKey()
   List<RequiredJobSkill> requiredJobSkills;
 
   JobNewDetailEntity(
@@ -77,6 +80,7 @@ class JobNewDetailEntity{
       this.status,
       this.typeOfWorkName,
       this.companyName,
+      this.requiredTechnologyText,
       this.jobShortDescription,
       this.salaryInVnd,
       this.jobDescription,

@@ -111,14 +111,16 @@ class _JobDetailPageState extends State<JobDetailPage> {
             SizedBox(
               height: 20,
             ),
-            BlocBuilder<JobDetailCubit,JobDetailState>(
+            BlocBuilder<JobDetailCubit, JobDetailState>(
               cubit: _jobDetailCubit,
               buildWhen: (previous, current) {
-                return previous.loadApply != current.loadApply || previous.loadStatus != current.loadStatus || previous.jobNewDetailEntity != current.jobNewDetailEntity;
+                return previous.loadApply != current.loadApply ||
+                    previous.loadStatus != current.loadStatus ||
+                    previous.jobNewDetailEntity != current.jobNewDetailEntity;
               },
               builder: (context, state) {
                 final isLoading = state.loadApply == LoadStatus.LOADING;
-                if(state.jobNewDetailEntity?.status  == 'Đã phê duyệt'){
+                if (state.jobNewDetailEntity?.status == 'Đã phê duyệt') {
                   return Container(
                     margin: EdgeInsets.symmetric(horizontal: 20),
                     child: AppGreenButton(
@@ -127,15 +129,14 @@ class _JobDetailPageState extends State<JobDetailPage> {
                       width: double.infinity,
                       title: 'Đăng kí',
                       isLoading: isLoading,
-                      onPressed: (){
+                      onPressed: () {
                         _jobDetailCubit.applyJob(widget.id.toString());
                       },
                     ),
                   );
-                }else{
+                } else {
                   return Container();
                 }
-
               },
             ),
             SizedBox(
@@ -242,8 +243,9 @@ class _JobDetailPageState extends State<JobDetailPage> {
             Container(
               width: 100,
               height: 100,
-              child:jobNewDetailEntity?.avatarUrl !=null ? Image.network(jobNewDetailEntity?.avatarUrl) :
-                  Image.asset("assets/user.png"),
+              child: jobNewDetailEntity?.avatarUrl != null
+                  ? Image.network(jobNewDetailEntity?.avatarUrl)
+                  : Image.asset("assets/user.png"),
             ),
             SizedBox(
               height: 8,
@@ -302,13 +304,17 @@ class _JobDetailPageState extends State<JobDetailPage> {
             SizedBox(
               height: 10,
             ),
-            _buildFieldJobDetail('Yêu cầu kinh nghiệm : ',
-                jobNewDetailEntity.requiredNumberYearsOfExperiences.toString()+" Năm"),
+            _buildFieldJobDetail(
+                'Yêu cầu kinh nghiệm : ',
+                jobNewDetailEntity.requiredNumberYearsOfExperiences.toString() +
+                    " Năm"),
             SizedBox(
               height: 10,
             ),
-            _buildFieldJobDetail('Số lượng nhân viên : ',
-                jobNewDetailEntity.companySizeByNumberEmployees.toString()+" Người"),
+            _buildFieldJobDetail(
+                'Số lượng nhân viên : ',
+                jobNewDetailEntity.companySizeByNumberEmployees.toString() +
+                    " Người"),
             SizedBox(
               height: 10,
             ),
@@ -327,8 +333,13 @@ class _JobDetailPageState extends State<JobDetailPage> {
             SizedBox(
               height: 10,
             ),
+            _buildFieldJobDetail('Thời gian đăng tin: ',
+                _convertDateTime(jobNewDetailEntity?.timeCreatedNewsMillis)),
+            SizedBox(
+              height: 10,
+            ),
             _buildFieldJobDetail(
-                'Thời gian đăng tin: ', _convertDateTime(jobNewDetailEntity?.timeCreatedNewsMillis)),
+                'Yêu cầu bắt buộc : ', jobNewDetailEntity?.requiredTechnologyText),
             SizedBox(
               height: 10,
             ),
@@ -343,8 +354,8 @@ class _JobDetailPageState extends State<JobDetailPage> {
     );
   }
 
-  String _convertDateTime(int time){
-    var date = new DateTime.fromMicrosecondsSinceEpoch(time*1000);
+  String _convertDateTime(int time) {
+    var date = new DateTime.fromMicrosecondsSinceEpoch(time * 1000);
     String formattedDate = DateFormat('dd-MM-yyyy').format(date);
     return formattedDate;
   }
@@ -364,7 +375,9 @@ class _JobDetailPageState extends State<JobDetailPage> {
             ),
           ),
         ),
-        SizedBox(height: 8,),
+        SizedBox(
+          height: 8,
+        ),
         Container(
           margin: EdgeInsets.symmetric(horizontal: 32),
           child: Text(
@@ -420,7 +433,9 @@ class _JobDetailPageState extends State<JobDetailPage> {
                         ),
                       ),
                     ),
-                    Divider(color: Colors.grey,),
+                    Divider(
+                      color: Colors.grey,
+                    ),
                   ],
                 );
               },
