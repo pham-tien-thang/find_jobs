@@ -14,6 +14,7 @@ JobNewDetailEntity _$JobNewDetailEntityFromJson(Map<String, dynamic> json) {
     status: json['statusName'] as String,
     typeOfWorkName: json['typeOfWorkName'] as String,
     companyName: json['companyName'] as String,
+    requiredTechnologyText: json['requiredTechnologyText'] as String,
     jobShortDescription: json['jobShortDescription'] as String,
     salaryInVnd: json['salaryInVnd'] as int,
     jobDescription: json['jobDescription'] as String,
@@ -60,5 +61,6 @@ Map<String, dynamic> _$JobNewDetailEntityToJson(JobNewDetailEntity instance) =>
       'companyWebsite': instance.companyWebsite,
       'companyEmail': instance.companyEmail,
       'companyPhoneNumber': instance.companyPhoneNumber,
+      'requiredTechnologyText': instance.requiredTechnologyText,
       'requiredJobSkills': instance.requiredJobSkills,
     };
