@@ -18,3 +18,23 @@ List ngonngu = [
   "SQL",
   "Ngôn ngữ khác"
 ];
+List ngonngu2 = [
+  "Không yêu cầu",
+  "Java",
+  "Kotlin",
+  "Swift",
+  "Objective-C",
+  "JavaScript",
+  "TypeScript",
+  "C",
+  "C++",
+  "C#",
+  "Python",
+  "Ruby",
+  "PHP",
+  "Shell",
+  "Go",
+  "HTML/CSS",
+  "SQL",
+  "Ngôn ngữ khác"
+];

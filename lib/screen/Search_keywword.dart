@@ -141,6 +141,7 @@ List<Job_mew_model> list_all = [];
               res_all['jobNewsArr'][i]['salaryInVnd'].toString(),
               res_all['jobNewsArr'][i]['districtName'].toString(),
               res_all['jobNewsArr'][i]['typeOfWorkName'],
+              res_all['jobNewsArr'][i]['requiredTechnologyText'].toString(),
               list_skill,
             );
             list_all.add(j);

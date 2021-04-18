@@ -9,6 +9,7 @@ class Job_mew_model{
   String time;
   String saraly;
   String position;
+  String language;
   List<Skill_jobs> skill;
-  Job_mew_model(this.company_name,this.title,this.id,this.address,this.position,this.saraly,this.time,this.huyen,this.skill);
+  Job_mew_model(this.company_name,this.title,this.id,this.address,this.position,this.saraly,this.time,this.huyen,this.language,this.skill);
 }
