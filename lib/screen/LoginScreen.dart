@@ -309,7 +309,7 @@ onWillPop: (){show_dialog();},
                             },
                           ),
                           Text(
-                            "Ghi nhớ mật khẩuu",
+                            "Ghi nhớ mật khẩu",
                             style: TextStyle(
                               fontSize: mda / 25,
                             ),
