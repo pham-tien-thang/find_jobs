@@ -5,6 +5,7 @@ import 'package:find_jobs/helper/Preferences.dart';
 import 'package:find_jobs/helper/Toast.dart';
 import 'package:find_jobs/main.dart';
 import 'package:find_jobs/screen/HomeScreen.dart';
+import 'package:find_jobs/screen/receive_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -308,20 +309,17 @@ onWillPop: (){show_dialog();},
                             },
                           ),
                           Text(
-                            "Ghi nhớ mật khẩu",
+                            "Ghi nhớ mật khẩuu",
                             style: TextStyle(
                               fontSize: mda / 25,
                             ),
                           )
                         ],
                       ),
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
-                          FocusScopeNode currentFocus = FocusScope.of(context);
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
-
+                          Navigator.push(
+                              context, new MaterialPageRoute(builder: (context) => MyR_code()));
                         },
                         child: Text(
                           "Quên mật khẩu?",
