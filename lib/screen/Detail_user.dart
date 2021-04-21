@@ -57,6 +57,27 @@ class _profile extends State<profile> {
     String t = formatter.format(dateConvert);
     return t;
   }
+  String graduate(String fromdata){
+    if(fromdata=="1"){
+      return"Không rõ";
+    }
+    if(fromdata=="2"){
+      return "Trên đại học";
+    }
+    if(fromdata=="3"){
+      return "Đại học";
+    }
+    if(fromdata=="4"){
+      return "Cao đẳng";
+    }
+    else return"Không rõ";
+  }
+  String gt(String g){
+    if(g=="0"){
+      return "Nữ";
+    }
+    else{return "Nam";}
+  }
   call_api_detail()async{
     String ten;  String gioitinh;  String luong;  String time;  String bangcap;  String year_exp;  String mota;
     String ngaysinh;  String diachi;  String phone;  String mail;  String muctieu=""; String kynang="";
@@ -119,17 +140,17 @@ exp += tencty+chucvu+motacongviec+vao+ra+"---------"+"\n";
 
 
 ten = res['data']['user']['fullName'].toString()=="null"?"chưa có":res['data']['user']['fullName'].toString();
-gioitinh = res['data']['user']['gender'].toString()=="null"?"chưa có":res['data']['user']['gender'].toString();
+gioitinh = res['data']['user']['genderId'].toString()=="null"?"chưa có":gt(res['data']['user']['genderId'].toString());
 luong = res['data']['user']['expectedSalaryInVnd'].toString()=="null"?"chưa có":res['data']['user']['expectedSalaryInVnd'].toString();
 time = res['data']['user']['typeOfWork'].toString()=="null"?"chưa có":res['data']['user']['typeOfWork'].toString();
-bangcap = res['data']['user']['graduatedEducation'].toString()=="null"?"chưa có": res['data']['user']['graduatedEducation'].toString();
+bangcap = res['data']['user']['graduatedEducationId'].toString()=="null"?"chưa có": graduate(res['data']['user']['graduatedEducationId'].toString());
 year_exp = res['data']['user']['yearsOfExperiences'].toString()=="null"?"chưa có":res['data']['user']['yearsOfExperiences'].toString();
 mota = res['data']['user']['resumeSummary'].toString()=="null"?"chưa có":res['data']['user']['resumeSummary'].toString();
 diachi = res['data']['user']['stateProvinceName'].toString()=="null"?"chưa có":res['data']['user']['stateProvinceName']+", "+res['data']['user']['districtName']+", "+res['data']['user']['subdistrictName'];
 phone = res['data']['user']['phone'].toString()=="null"?"chưa có":res['data']['user']['phone'].toString();
 mail = res['data']['user']['email'].toString()=="null"?"chưa có":res['data']['user']['email'].toString();
 mail_candicate = res['data']['user']['email'].toString()=="null"?"chưa có":res['data']['user']['email'].toString();
-muctieu = res['data']['user']['careerObjective'].toString()!="null"?"chưa có":res['data']['user']['careerObjective'].toString();
+muctieu = res['data']['user']['careerObjective'].toString()=="null"?"chưa có":res['data']['user']['careerObjective'].toString();
 ngaysinh = res['data']['user']['birthdayInMilliseconds'].toString()=="null"?"chưa có":birth(res['data']['user']['birthdayInMilliseconds'].toString());
 candicate = "Họ và tên: "+ten+"\n"
     "Giới tính: "+gioitinh+"\n"
