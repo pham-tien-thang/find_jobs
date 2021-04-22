@@ -77,7 +77,7 @@ String noiquy = "Để nhà tuyển dụng và các ứng viên có lợi ích t
 " - Website công ty viết bao gồm cả http:// hoặc https:// và còn hoạt động.\n"
 " - Mô tả ngắn gọn rõ ràng\n"+
 " - Không đăng những tin không phải VIỆC LÀM IT.\n"+
-" - Ngôn ngữ phù hợp, không sử dụng những từ ngữ thô tục, thiếu văn hóa, xúc phạm người đọc, hoặc những từ ngữ không phù hợp với pháp luật Việt Nam.\n";
-
+" - Ngôn ngữ phù hợp, không sử dụng những từ ngữ thô tục, thiếu văn hóa, xúc phạm người đọc, hoặc những từ ngữ không phù hợp với pháp luật Việt Nam.\n"+
+" - Mỗi tin tuyển dụng tồn tại tối đa 90 ngày kể từ ngày được phê duyệt.\n";
 String quyen = " - Chúng tôi có quyền xóa hoặc không phê duyệt những bài viết vi phạm một trong những quy tắc trên và không cần thông báo trước, nếu chúng tôi nhận thấy việc này là vì lợi ích của người dùng.\n"+
     " - Tài khoản cố tình vi phạm có thể bị xóa tài khoản vĩnh viễn mà không được thông báo trước.";
