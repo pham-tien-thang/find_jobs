@@ -56,6 +56,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   retrofit_generator: ^1.3.7+5
+  firebase_messaging: any
   build_runner: ^1.10.0
   json_serializable: ^3.5.0
   built_value_generator: ^7.1.0

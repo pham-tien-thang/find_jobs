@@ -9,7 +9,7 @@ import 'package:find_jobs/screen/LoginScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'helper/Preferences.dart';
 
 void main() {
@@ -78,10 +78,38 @@ class _MyHomePageState extends State<MyHomePage> {
               new MaterialPageRoute(builder: (context) => LoginScreen()));
     });
   }
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  _getToken() {
+    //token nguoi cần gửi
+    _firebaseMessaging.getToken().then((token) {
+      print("Device Token: $token");
+    });
+  }
+  _configureFirebaseListeners() {
+    _firebaseMessaging.configure(
+      //onMessage == ứng dụng đang hoạt động
+        onMessage: (Map<String, dynamic> message) async {
+          print(
+              'onMessage  $message');
+        },
+        //onLaunch == ứng dụng đã thoát hẳn
+        onLaunch: (Map<String, dynamic> message) async {
+          print('---------------------- onLaunch $message');
 
+        },
+        //onResume == ứng dụng đang ẩn
+        onResume: (Map<String, dynamic> message) async {
+          print('---------------------- Resum');
+        });
+    _firebaseMessaging.requestNotificationPermissions(
+      const IosNotificationSettings(sound: true, badge: true, alert: true),
+    );
+  }
   @override
   void initState() {
     // TODO: implement initState
+    _getToken();
+    _configureFirebaseListeners();
     chuyen();
     print('aaaa2');
     super.initState();
